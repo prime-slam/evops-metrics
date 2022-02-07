@@ -1,26 +1,12 @@
 import numpy as np
 
 
-def get_dictionary_indices_of_current_label(indices_array: np.ndarray) -> dict:
+def group_indices_by_labels(labels_array: np.ndarray) -> dict:
+    unique = np.unique(labels_array)
     dictionary = {}
 
-    for index, value in enumerate(indices_array):
-        if value in dictionary:
-            dictionary[value] = np.append(dictionary[value], index)
-        else:
-            dictionary[value] = np.array(index)
+    for label in unique:
+        label_indices = np.where(labels_array == label)[0]
+        dictionary[label] = label_indices
 
     return dictionary
-
-
-def planes_intersection_indices(
-    plane_left: np.ndarray, plane_right: np.ndarray
-) -> np.array:
-    return np.intersect1d(plane_left, plane_right)
-
-
-def planes_union_indices(
-    plane_left: np.ndarray,
-    plane_right: np.ndarray,
-) -> np.array:
-    return np.union1d(plane_left, plane_right)
