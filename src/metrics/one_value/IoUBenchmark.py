@@ -35,7 +35,9 @@ class IoUBenchmark(Benchmark):
             if key in plane_gt_dic:
                 iou_mean_array = np.append(
                     iou_mean_array,
-                    self.calculate_metric(point_cloud, plane_predicted_dict[key], plane_gt_dic[key]),
+                    self.calculate_metric(
+                        point_cloud, plane_predicted_dict[key], plane_gt_dic[key]
+                    ),
                 )
 
         if iou_mean_array.size == 0:
