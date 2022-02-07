@@ -1,9 +1,9 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
 import numpy as np
 
 
-class Benchmark:
+class Benchmark(ABC):
     @property
     def metric_name(self):
         return self.get_metric_name()
