@@ -24,8 +24,13 @@ def mean(
     :param metrics: list of metric functions for which you want to get the mean value
     :return: list of mean value for each metric
     """
-    assert pc_points.shape[0] == pred_labels.size
-    assert pred_labels.size == gt_labels.size
+    assert pc_points.shape[1] == 3, "Dimension of the array of points should be (n, 3)"
+    assert (
+        pc_points.shape[0] == pred_labels.size
+    ), "Number of points does not match the array of predicted labels"
+    assert (
+        pc_points.shape[0] == gt_labels.size
+    ), "Number of points does not match the array of ground truth labels"
 
     plane_predicted_dict = group_indices_by_labels(pred_labels)
     plane_gt_dict = group_indices_by_labels(gt_labels)
