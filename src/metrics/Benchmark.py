@@ -1,43 +1,35 @@
-from abc import abstractmethod, ABC
+from typing import Callable, List
 
 import numpy as np
 
+from src.utils.metrics import group_indices_by_labels
 
-class Benchmark(ABC):
-    @property
-    def metric_name(self):
-        return self.get_metric_name()
 
-    @abstractmethod
-    def get_metric_name(self) -> str:
-        pass
+def mean(
+    pc_points: np.ndarray,
+    pred_labels: np.ndarray,
+    gt_labels: np.ndarray,
+    metrics: List[Callable[[np.ndarray, np.ndarray, np.ndarray], np.float64]],
+) -> List[np.float64]:
+    plane_predicted_dict = group_indices_by_labels(pred_labels)
+    plane_gt_dict = group_indices_by_labels(gt_labels)
+    unique_labels = np.unique(pred_labels)
+    metrics_mean = []
 
-    @abstractmethod
-    def calculate_metric(
-        self,
-        pc_points: np.ndarray,
-        pred_indices: np.ndarray,
-        gt_indices: np.ndarray,
-    ) -> np.float64:
-        """
-        :param pc_points: source point cloud
-        :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-        :param gt_indices: indices of points belonging to the reference plane
-        :return:
-        """
-        pass
+    for metric in metrics:
+        mean_array = np.empty((1, 0), np.float64)
+        for label in unique_labels:
+            if label in plane_gt_dict:
+                mean_array = np.append(
+                    mean_array,
+                    metric(
+                        pc_points, plane_predicted_dict[label], plane_gt_dict[label]
+                    ),
+                )
 
-    @abstractmethod
-    def calculate_metric_mean(
-        self,
-        pc_points: np.ndarray,
-        pred_labels: np.ndarray,
-        gt_labels: np.ndarray,
-    ) -> np.float64:
-        """
-        :param pc_points: source point cloud
-        :param pred_labels: labels of points obtained as a result of segmentation
-        :param gt_labels: reference labels of point cloud
-        :return:
-        """
-        pass
+        if mean_array.size == 0:
+            metrics_mean.append(0)
+        else:
+            metrics_mean.append(mean_array.mean())
+
+    return metrics_mean
