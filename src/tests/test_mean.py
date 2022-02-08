@@ -6,7 +6,7 @@ from src.metrics.IoUBenchmark import iou
 
 
 def test_mean_simple_array():
-    pc_points = np.empty((0, 3), np.float64)
+    pc_points = np.eye(3, 3)
     pred_labels = np.array([1, 1, 1])
     gt_labels = np.array([1, 1, 1])
 
@@ -16,7 +16,7 @@ def test_mean_simple_array():
 
 
 def test_mean_half_result():
-    pc_points = np.empty((0, 3), np.float64)
+    pc_points = np.eye(4, 3)
     pred_labels = np.array([1, 2, 1, 2])
     gt_labels = np.array([1, 1, 1, 1])
 
@@ -26,7 +26,7 @@ def test_mean_half_result():
 
 
 def test_cumulative_null_result():
-    pc_points = np.empty((0, 3), np.float64)
+    pc_points = np.eye(4, 3)
     pred_labels = np.array([1, 2, 3, 4])
     gt_labels = np.array([5, 6, 7, 8])
 

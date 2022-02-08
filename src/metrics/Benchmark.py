@@ -17,6 +17,16 @@ def mean(
         ]
     ],
 ) -> List[np.float64]:
+    """
+    :param pc_points: source point cloud
+    :param pred_labels: labels of points obtained as a result of segmentation
+    :param gt_labels: reference labels of point cloud
+    :param metrics: list of metric functions for which you want to get the mean value
+    :return: list of mean value for each metric
+    """
+    assert pc_points.shape[0] == pred_labels.size
+    assert pred_labels.size == gt_labels.size
+
     plane_predicted_dict = group_indices_by_labels(pred_labels)
     plane_gt_dict = group_indices_by_labels(gt_labels)
     unique_labels = np.unique(pred_labels)

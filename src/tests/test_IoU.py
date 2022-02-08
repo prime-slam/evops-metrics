@@ -5,7 +5,7 @@ from src.metrics.IoUBenchmark import iou
 
 
 def test_null_iou_result():
-    pc_points = np.empty((0, 3), np.float64)
+    pc_points = np.eye(4, 3)
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([5, 6, 7, 8])
 
@@ -13,7 +13,7 @@ def test_null_iou_result():
 
 
 def test_full_iou_result():
-    pc_points = np.empty((0, 3), np.float64)
+    pc_points = np.eye(4, 3)
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([1, 2, 3, 4])
 
