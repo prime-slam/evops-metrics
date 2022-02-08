@@ -44,7 +44,7 @@ def test_mean_first_assert():
         metric = iou
         mean(pc_points, pred_labels, gt_labels, metric)
 
-    assert str(excinfo.value) == "Dimension of the array of points should be (n, 3)"
+    assert str(excinfo.value) == "Incorrect point cloud array size, expected (n, 3)"
 
 
 def test_mean_second_assert():
@@ -86,7 +86,7 @@ def test_mean_shape_pc_assert():
         metric = iou
         mean(pc_points, pred_labels, gt_labels, metric)
 
-    assert str(excinfo.value) == "Incorrect point cloud array size"
+    assert str(excinfo.value) == "Incorrect point cloud array size, expected (n, 3)"
 
 
 def test_mean_pred_labels_assert():
@@ -98,7 +98,7 @@ def test_mean_pred_labels_assert():
         metric = iou
         mean(pc_points, pred_labels, gt_labels, metric)
 
-    assert str(excinfo.value) == "Incorrect predicted label array size"
+    assert str(excinfo.value) == "Incorrect predicted label array size, expected (n)"
 
 
 def test_mean_gt_labels_assert():
@@ -110,4 +110,4 @@ def test_mean_gt_labels_assert():
         metric = iou
         mean(pc_points, pred_labels, gt_labels, metric)
 
-    assert str(excinfo.value) == "Incorrect ground truth label array size"
+    assert str(excinfo.value) == "Incorrect ground truth label array size, expected (n)"

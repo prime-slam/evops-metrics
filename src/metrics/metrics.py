@@ -22,10 +22,15 @@ def mean(
     :param metric: metric function for which you want to get the mean value
     :return: list of mean value for each metric
     """
-    assert len(pc_points.shape) == 2, "Incorrect point cloud array size"
-    assert len(pred_labels.shape) == 1, "Incorrect predicted label array size"
-    assert len(gt_labels.shape) == 1, "Incorrect ground truth label array size"
-    assert pc_points.shape[1] == 3, "Dimension of the array of points should be (n, 3)"
+    assert (
+        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
+    ), "Incorrect point cloud array size, expected (n, 3)"
+    assert (
+        len(pred_labels.shape) == 1
+    ), "Incorrect predicted label array size, expected (n)"
+    assert (
+        len(gt_labels.shape) == 1
+    ), "Incorrect ground truth label array size, expected (n)"
     assert (
         pc_points.shape[0] == pred_labels.size
     ), "Number of points does not match the array of predicted labels"
