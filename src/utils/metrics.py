@@ -1,7 +1,12 @@
+from typing import Dict
+
 import numpy as np
+import numpy.typing as npt
 
 
-def group_indices_by_labels(labels_array: np.ndarray) -> dict:
+def group_indices_by_labels(
+    labels_array: npt.NDArray[np.int32],
+) -> Dict[np.int32, npt.NDArray[np.int32]]:
     unique_labels = np.unique(labels_array)
     dictionary = {}
 

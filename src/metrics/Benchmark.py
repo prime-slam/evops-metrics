@@ -1,15 +1,21 @@
 from typing import Callable, List
 
 import numpy as np
+import numpy.typing as npt
 
 from src.utils.metrics import group_indices_by_labels
 
 
 def mean(
-    pc_points: np.ndarray,
-    pred_labels: np.ndarray,
-    gt_labels: np.ndarray,
-    metrics: List[Callable[[np.ndarray, np.ndarray, np.ndarray], np.float64]],
+    pc_points: npt.NDArray[np.float64],
+    pred_labels: npt.NDArray[np.int32],
+    gt_labels: npt.NDArray[np.int32],
+    metrics: List[
+        Callable[
+            [npt.NDArray[np.float64], npt.NDArray[np.int32], npt.NDArray[np.int32]],
+            np.float64,
+        ]
+    ],
 ) -> List[np.float64]:
     plane_predicted_dict = group_indices_by_labels(pred_labels)
     plane_gt_dict = group_indices_by_labels(gt_labels)
