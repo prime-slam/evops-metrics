@@ -1,12 +1,12 @@
-from typing import Dict
+from typing import Dict, Any
 
 import numpy as np
-import numpy.typing as npt
+from nptyping import NDArray
 
 
-def group_indices_by_labels(
-    labels_array: npt.NDArray[np.int32],
-) -> Dict[np.int32, npt.NDArray[np.int32]]:
+def __group_indices_by_labels(
+    labels_array: NDArray[Any, np.int32],
+) -> Dict[np.int32, NDArray[Any, np.int32]]:
     """
     :param labels_array: list of point cloud labels
     :return: dictionary with labels and an array of indices belonging to this label
