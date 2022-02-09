@@ -17,10 +17,10 @@ def precision(
     :param gt_indices: indices of points belonging to the reference plane
     :return: precision metric value for plane
     """
-    TP = np.intersect1d(pred_indices, gt_indices).size
-    FP = np.union1d(pred_indices, gt_indices).size - gt_indices.size
+    truePositive = np.intersect1d(pred_indices, gt_indices).size
+    falsePositive = np.union1d(pred_indices, gt_indices).size - gt_indices.size
 
-    return TP / FP
+    return truePositive / (falsePositive + truePositive)
 
 
 def accuracy(
@@ -75,6 +75,9 @@ def fScore(
     precision_value = precision(pc_points, pred_indices, gt_indices)
     recall_value = recall(pc_points, pred_indices, gt_indices)
 
+    if precision_value + recall_value == 0:
+        return 0
+
     return 2 * precision_value * recall_value / (precision_value + recall_value)
 
 
@@ -83,16 +86,30 @@ def get_all_multi_value_metrics(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ) -> Dict[np.int64, NDArray[4, np.float64]]:
+    """
+    :param pc_points: source point cloud
+    :param pred_labels: labels of points obtained as a result of segmentation
+    :param gt_labels: reference labels of point cloud
+    :return: dictionary with keys --- labels, values --- array with metric values
+    """
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
     metrics_dictionary = {}
 
-    for label, plane in plane_predicted_dict:
+    for label in plane_predicted_dict:
         if label in plane_gt_dict:
-            precision_value = precision(pc_points, pred_labels, gt_labels)
-            accuracy_value = accuracy(pc_points, pred_labels, gt_labels)
-            recall_value = recall(pc_points, pred_labels, gt_labels)
-            fScore_value = fScore(pc_points, pred_labels, gt_labels)
+            precision_value = precision(
+                pc_points, plane_predicted_dict[label], plane_gt_dict[label]
+            )
+            accuracy_value = accuracy(
+                pc_points, plane_predicted_dict[label], plane_gt_dict[label]
+            )
+            recall_value = recall(
+                pc_points, plane_predicted_dict[label], plane_gt_dict[label]
+            )
+            fScore_value = fScore(
+                pc_points, plane_predicted_dict[label], plane_gt_dict[label]
+            )
             metrics_dictionary[label] = np.array(
                 [precision_value, accuracy_value, recall_value, fScore_value]
             )
