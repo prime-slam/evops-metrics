@@ -18,8 +18,5 @@ def dice(
     assert pred_indices.size + gt_indices.size != 0, "Array sizes must be positive"
 
     intersection = np.intersect1d(pred_indices, gt_indices)
-    intersection_size = intersection.size
-    gt_size = gt_indices.size
-    predicted_size = pred_indices.size
 
-    return 2 * intersection_size / (predicted_size + gt_size)
+    return 2 * intersection.size / (pred_indices.size + gt_indices.size)

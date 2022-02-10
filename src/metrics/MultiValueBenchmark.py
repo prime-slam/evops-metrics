@@ -11,6 +11,16 @@ def precision(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:
+    assert (
+        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
+    ), "Incorrect point cloud array size, expected (n, 3)"
+    assert (
+        len(pred_indices.shape) == 1
+    ), "Incorrect predicted label array size, expected (n)"
+    assert (
+        len(gt_indices.shape) == 1
+    ), "Incorrect ground truth label array size, expected (n)"
+    assert pred_indices.size != 0, "predicted indices array size must not be zero"
     """
     :param pc_points: source point cloud
     :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
@@ -18,9 +28,8 @@ def precision(
     :return: precision metric value for plane
     """
     truePositive = np.intersect1d(pred_indices, gt_indices).size
-    falsePositive = np.union1d(pred_indices, gt_indices).size - gt_indices.size
 
-    return truePositive / (falsePositive + truePositive)
+    return truePositive / pred_indices.size
 
 
 def accuracy(
@@ -28,6 +37,15 @@ def accuracy(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:
+    assert (
+        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
+    ), "Incorrect point cloud array size, expected (n, 3)"
+    assert (
+        len(pred_indices.shape) == 1
+    ), "Incorrect predicted label array size, expected (n)"
+    assert (
+        len(gt_indices.shape) == 1
+    ), "Incorrect ground truth label array size, expected (n)"
     """
     :param pc_points: source point cloud
     :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
@@ -49,6 +67,16 @@ def recall(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:
+    assert (
+        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
+    ), "Incorrect point cloud array size, expected (n, 3)"
+    assert (
+        len(pred_indices.shape) == 1
+    ), "Incorrect predicted label array size, expected (n)"
+    assert (
+        len(gt_indices.shape) == 1
+    ), "Incorrect ground truth label array size, expected (n)"
+    assert gt_indices.size != 0, "ground truth indices array size must not be zero"
     """
     :param pc_points: source point cloud
     :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
@@ -56,9 +84,8 @@ def recall(
     :return: recall metric value for plane
     """
     truePositive = np.intersect1d(pred_indices, gt_indices).size
-    falseNegative = np.union1d(pred_indices, gt_indices).size - pred_indices.size
 
-    return truePositive / (truePositive + falseNegative)
+    return truePositive / gt_indices.size
 
 
 def fScore(
@@ -66,6 +93,15 @@ def fScore(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:
+    assert (
+        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
+    ), "Incorrect point cloud array size, expected (n, 3)"
+    assert (
+        len(pred_indices.shape) == 1
+    ), "Incorrect predicted label array size, expected (n)"
+    assert (
+        len(gt_indices.shape) == 1
+    ), "Incorrect ground truth label array size, expected (n)"
     """
     :param pc_points: source point cloud
     :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
@@ -86,6 +122,15 @@ def get_all_multi_value_metrics(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ) -> Dict[np.int64, NDArray[4, np.float64]]:
+    assert (
+        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
+    ), "Incorrect point cloud array size, expected (n, 3)"
+    assert (
+        len(pred_labels.shape) == 1
+    ), "Incorrect predicted label array size, expected (n)"
+    assert (
+        len(gt_labels.shape) == 1
+    ), "Incorrect ground truth label array size, expected (n)"
     """
     :param pc_points: source point cloud
     :param pred_labels: labels of points obtained as a result of segmentation
