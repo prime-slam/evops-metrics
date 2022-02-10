@@ -24,7 +24,7 @@ def __group_indices_by_labels(
 def __are_nearly_overlapped(
     plane_predicted: NDArray[Any, np.int32],
     plane_gt: NDArray[Any, np.int32],
-    required_overlap: float,
+    required_overlap: np.float64 = 0.8,
 ):
     """
     Calculate if planes are overlapped enough (80%) to be used for PP-PR metric
