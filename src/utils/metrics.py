@@ -19,3 +19,23 @@ def __group_indices_by_labels(
         dictionary[label] = label_indices
 
     return dictionary
+
+
+def __are_nearly_overlapped(
+    plane_predicted: NDArray[Any, np.int32],
+    plane_gt: NDArray[Any, np.int32],
+    required_overlap: float,
+):
+    """
+    Calculate if planes are overlapped enough (80%) to be used for PP-PR metric
+    :param required_overlap: overlap threshold which will b checked to say that planes overlaps
+    :param plane_predicted: predicted segmentation
+    :param plane_gt: ground truth segmentation
+    :return: true if planes are overlapping by 80% or more, false otherwise
+    """
+    intersection = np.intersect1d(plane_predicted, plane_gt)
+
+    return (
+        intersection.size / plane_predicted.size >= required_overlap
+        and intersection.size / plane_gt.size >= required_overlap
+    )
