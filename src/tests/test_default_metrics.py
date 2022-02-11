@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.metrics.DefaultMetrics import (
+from src.metrics.metrics import (
     precision,
     accuracy,
     recall,

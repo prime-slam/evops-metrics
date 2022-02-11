@@ -6,28 +6,12 @@ from nptyping import NDArray
 from src.utils.metrics import __group_indices_by_labels, __are_nearly_overlapped
 
 
-def multi_value_benchmark(
+def __multi_value_benchmark(
     pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     overlap_threshold: np.float64 = 0.8,
 ) -> (np.float64, np.float64, np.float64, np.float64, np.float64, np.float64):
-    """
-    :param pc_points: source point cloud
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param overlap_threshold: minimum value at which the planes are considered intersected
-    :return: precision, recall, under_segmented, over_segmented, missed, noise
-    """
-    assert (
-        len(pc_points.shape) == 2 and pc_points.shape[1] == 3
-    ), "Incorrect point cloud array size, expected (n, 3)"
-    assert (
-        len(pred_labels.shape) == 1
-    ), "Incorrect predicted label array size, expected (n)"
-    assert (
-        len(gt_labels.shape) == 1
-    ), "Incorrect ground truth label array size, expected (n)"
     correctly_segmented_amount = 0
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)

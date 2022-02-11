@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.metrics.DiceBenchmark import dice
+from src.metrics.metrics import dice
 
 
 def test_assert_dice_exception():

@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.metrics.IoUBenchmark import iou
+from src.metrics.metrics import iou
 
 
 def test_null_iou_result():

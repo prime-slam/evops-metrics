@@ -1,8 +1,7 @@
 import numpy as np
 import pytest
 
-from src.metrics.metrics import mean
-from src.metrics.IoUBenchmark import iou
+from src.metrics.metrics import mean, iou
 
 
 def test_mean_simple_array():
