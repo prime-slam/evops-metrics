@@ -3,7 +3,7 @@ from typing import Any, Callable
 import numpy as np
 from nptyping import NDArray
 
-from src.utils.metrics import __group_indices_by_labels
+from src.utils.metrics_utils import __group_indices_by_labels
 
 
 def __mean(

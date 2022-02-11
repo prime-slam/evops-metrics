@@ -3,7 +3,7 @@ from typing import Any
 import numpy as np
 from nptyping import NDArray
 
-from src.utils.metrics import __group_indices_by_labels, __are_nearly_overlapped
+from src.utils.metrics_utils import __group_indices_by_labels, __are_nearly_overlapped
 
 
 def __multi_value_benchmark(
