@@ -1,7 +1,9 @@
 import numpy as np
 import pytest
+import open3d as o3d
 
 from src.metrics.metrics import dice
+from src.utils.metrics_utils import __group_indices_by_labels
 
 
 def test_assert_dice_exception():
@@ -37,3 +39,14 @@ def test_half_dice_result():
     gt_indices = np.array([1, 2, 5, 6])
 
     assert 0.5 == pytest.approx(dice(pc_points, pred_indices, gt_indices))
+
+
+def test_dice_real_data():
+    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = np.asarray(point_cloud.points)
+    pred_labels = np.load("data/pred_0.npy")
+    gt_labels = np.load("data/gt_0.npy")
+    pred = __group_indices_by_labels(pred_labels)
+    gt = __group_indices_by_labels(gt_labels)
+
+    assert 0.73 == pytest.approx(dice(point_cloud, pred[0.0], gt[0.0]), 0.01)

@@ -1,7 +1,9 @@
 import numpy as np
 import pytest
+import open3d as o3d
 
 from src.metrics.metrics import iou
+from src.utils.metrics_utils import __group_indices_by_labels
 
 
 def test_null_iou_result():
@@ -29,3 +31,14 @@ def test_assert_iou_exception():
         iou(pc_points, pred_labels, gt_labels)
 
     assert str(excinfo.value) == "Array sizes must be positive"
+
+
+def test_iou_real_data():
+    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = np.asarray(point_cloud.points)
+    pred_labels = np.load("data/pred_0.npy")
+    gt_labels = np.load("data/gt_0.npy")
+    pred = __group_indices_by_labels(pred_labels)
+    gt = __group_indices_by_labels(gt_labels)
+
+    assert 0.57 == pytest.approx(iou(point_cloud, pred[0.0], gt[0.0]), 0.01)

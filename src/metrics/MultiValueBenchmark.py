@@ -1,4 +1,5 @@
 from typing import Any
+import pickle
 
 import numpy as np
 from nptyping import NDArray
@@ -20,17 +21,21 @@ def __multi_value_benchmark(
     under_segmented_amount = 0
     noise_amount = 0
 
-    overlapped_predicted_by_gt = {plane: [] for plane in plane_gt_dict.items()}
+    overlapped_predicted_by_gt = {
+        pickle.dumps(plane): [] for label, plane in plane_gt_dict.items()
+    }
 
-    for predicted_plane in plane_predicted_dict.items():
+    for predicted_label, predicted_plane in plane_predicted_dict.items():
         overlapped_gt_planes = []
-        for gt_plane in plane_gt_dict.items():
+        for gt_label, gt_plane in plane_gt_dict.items():
             are_well_overlapped = __are_nearly_overlapped(
                 predicted_plane, gt_plane, overlap_threshold
             )
             if are_well_overlapped:
                 overlapped_gt_planes.append(gt_plane)
-                overlapped_predicted_by_gt[gt_plane].append(predicted_plane)
+                overlapped_predicted_by_gt[pickle.dumps(gt_plane)].append(
+                    pickle.dumps(predicted_plane)
+                )
 
         if len(overlapped_gt_planes) > 0:
             correctly_segmented_amount += 1

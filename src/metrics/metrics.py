@@ -7,7 +7,7 @@ from src.metrics.DefaultMetrics import __precision, __accuracy, __recall, __fSco
 from src.metrics.DiceBenchmark import __dice
 from src.metrics.IoUBenchmark import __iou
 from src.metrics.MultiValueBenchmark import __multi_value_benchmark
-from src.metrics.mean import __mean
+from src.metrics.Mean import __mean
 
 
 def iou(
