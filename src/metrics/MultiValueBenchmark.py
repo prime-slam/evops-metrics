@@ -21,7 +21,7 @@ def __multi_value_benchmark(
     under_segmented_amount = 0
     noise_amount = 0
 
-    overlapped_predicted_by_gt = {label: [] for label, plane in plane_gt_dict.items()}
+    overlapped_predicted_by_gt = {label: [] for label in plane_gt_dict.keys()}
 
     for predicted_label, predicted_plane in plane_predicted_dict.items():
         overlapped_gt_planes = []
