@@ -10,7 +10,7 @@ from src.metrics.MultiValueBenchmark import __multi_value_benchmark
 from src.metrics.Mean import __mean
 
 
-UNSEGMENTED_LABEL = 0.0
+UNSEGMENTED_LABEL = 0
 
 
 def iou(
