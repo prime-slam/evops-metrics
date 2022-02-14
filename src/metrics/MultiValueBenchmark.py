@@ -1,9 +1,9 @@
 from typing import Any
-import pickle
 
 import numpy as np
 from nptyping import NDArray
 
+import src.metrics.metrics
 from src.utils.metrics_utils import __group_indices_by_labels, __are_nearly_overlapped
 
 
@@ -16,6 +16,10 @@ def __multi_value_benchmark(
     correctly_segmented_amount = 0
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
+    if src.metrics.metrics.UNSEGMENTED_LABEL in plane_predicted_dict:
+        del plane_predicted_dict[src.metrics.metrics.UNSEGMENTED_LABEL]
+    if src.metrics.metrics.UNSEGMENTED_LABEL in plane_gt_dict:
+        del plane_gt_dict[src.metrics.metrics.UNSEGMENTED_LABEL]
     predicted_amount = len(plane_predicted_dict)
     gt_amount = len(plane_gt_dict)
     under_segmented_amount = 0

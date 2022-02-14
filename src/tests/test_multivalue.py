@@ -17,9 +17,9 @@ def test_multi_value_iou_real_data():
         point_cloud, pred_labels, gt_labels
     )
 
-    assert 0.67 == pytest.approx(precision, 0.01)
-    assert 0.22 == pytest.approx(recall, 0.01)
+    assert 0.8 == pytest.approx(precision, 0.01)
+    assert 0.235 == pytest.approx(recall, 0.01)
     assert 0 == pytest.approx(under_segmented, 0.01)
     assert 0 == pytest.approx(over_segmented, 0.01)
-    assert 0.78 == pytest.approx(missed, 0.01)
-    assert 0.33 == pytest.approx(noise, 0.01)
+    assert 0.76 == pytest.approx(missed, 0.01)
+    assert 0.2 == pytest.approx(noise, 0.01)

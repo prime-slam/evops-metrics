@@ -3,6 +3,7 @@ from typing import Any, Callable
 import numpy as np
 from nptyping import NDArray
 
+import src.metrics.metrics
 from src.utils.metrics_utils import __group_indices_by_labels
 
 
@@ -17,6 +18,10 @@ def __mean(
 ) -> np.float64:
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
+    if src.metrics.metrics.UNSEGMENTED_LABEL in plane_predicted_dict:
+        del plane_predicted_dict[src.metrics.metrics.UNSEGMENTED_LABEL]
+    if src.metrics.metrics.UNSEGMENTED_LABEL in plane_gt_dict:
+        del plane_gt_dict[src.metrics.metrics.UNSEGMENTED_LABEL]
     unique_labels = np.unique(pred_labels)
     mean_array = np.empty((1, 0), np.float64)
 

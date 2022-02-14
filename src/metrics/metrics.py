@@ -10,6 +10,9 @@ from src.metrics.MultiValueBenchmark import __multi_value_benchmark
 from src.metrics.Mean import __mean
 
 
+UNSEGMENTED_LABEL = 0.0
+
+
 def iou(
     pc_points: NDArray[(Any, 3), np.float64],
     pred_indices: NDArray[Any, np.int32],

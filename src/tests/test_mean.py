@@ -120,4 +120,4 @@ def test_mean_iou_real_data():
     pred_labels = np.load("data/pred_0.npy")
     gt_labels = np.load("data/gt_0.npy")
 
-    assert 0.095 == pytest.approx(mean(point_cloud, pred_labels, gt_labels, iou), 0.01)
+    assert 0.0 == pytest.approx(mean(point_cloud, pred_labels, gt_labels, iou), 0.01)
