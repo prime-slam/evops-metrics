@@ -1,5 +1,3 @@
-import os
-
 import numpy as np
 import open3d as o3d
 import pytest
@@ -7,7 +5,7 @@ import pytest
 from src.metrics.metrics import multi_value
 
 
-def test_multi_value_iou_real_data():
+def test_multi_value_benchmark_real_data():
     point_cloud = o3d.io.read_point_cloud("data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
     pred_labels = np.load("data/pred_0.npy")
