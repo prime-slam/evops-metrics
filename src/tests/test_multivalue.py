@@ -13,13 +13,11 @@ def test_multi_value_iou_real_data():
     pred_labels = np.load("data/pred_0.npy")
     gt_labels = np.load("data/gt_0.npy")
 
-    precision, recall, under_segmented, over_segmented, missed, noise = multi_value(
-        point_cloud, pred_labels, gt_labels
-    )
+    result = multi_value(point_cloud, pred_labels, gt_labels)
 
-    assert 0.8 == pytest.approx(precision, 0.01)
-    assert 0.235 == pytest.approx(recall, 0.01)
-    assert 0 == pytest.approx(under_segmented, 0.01)
-    assert 0 == pytest.approx(over_segmented, 0.01)
-    assert 0.76 == pytest.approx(missed, 0.01)
-    assert 0.2 == pytest.approx(noise, 0.01)
+    assert 0.8 == pytest.approx(result["precision"], 0.01)
+    assert 0.235 == pytest.approx(result["recall"], 0.01)
+    assert 0 == pytest.approx(result["under_segmented"], 0.01)
+    assert 0 == pytest.approx(result["over_segmented"], 0.01)
+    assert 0.76 == pytest.approx(result["missed"], 0.01)
+    assert 0.2 == pytest.approx(result["noise"], 0.01)
