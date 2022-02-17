@@ -25,7 +25,7 @@ def __are_nearly_overlapped(
     plane_predicted: NDArray[Any, np.int32],
     plane_gt: NDArray[Any, np.int32],
     required_overlap: np.float64,
-):
+) -> (bool, bool):
     """
     Calculate if planes are overlapped enough (required_overlap %) to be used for PP-PR metric
     :param required_overlap: overlap threshold which will b checked to say that planes overlaps
@@ -37,5 +37,6 @@ def __are_nearly_overlapped(
 
     return (
         intersection.size / plane_predicted.size >= required_overlap
-        and intersection.size / plane_gt.size >= required_overlap
+        and intersection.size / plane_gt.size >= required_overlap,
+        intersection.size > 0,
     )
