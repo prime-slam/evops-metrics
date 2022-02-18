@@ -48,7 +48,7 @@ def __multi_value_benchmark(
         else:
             noise_amount += 1
 
-        if len(part_overlapped_gt_planes) > 0:
+        if len(part_overlapped_gt_planes) > 1:
             under_segmented_amount += 1
 
     missed_amount = 0
