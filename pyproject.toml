@@ -2,7 +2,7 @@
 name = "evops"
 version = "0.1.0"
 description = "Evaluation of Plane Segmentation."
-authors = ["Dmitry Yarosh", "Pavel Mokeev"]
+authors = ["Dmitriy Jarosh", "Pavel Mokeev"]
 license = "APACHE"
 
 [tool.poetry.dependencies]
@@ -15,6 +15,9 @@ open3d = "^0.14.1"
 black = "^22.1.0"
 pre-commit = "^2.17.0"
 pytest = "^7.0.0"
+myst-nb = {version = "^0.13.2", python = "^3.9"}
+sphinx-autoapi = "^1.8.4"
+sphinx-rtd-theme = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
