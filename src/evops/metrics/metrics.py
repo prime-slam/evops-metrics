@@ -1,13 +1,13 @@
 from typing import Callable, Any
-
-import numpy as np
 from nptyping import NDArray
 
-from src.metrics.DefaultMetrics import __precision, __accuracy, __recall, __fScore
-from src.metrics.DiceBenchmark import __dice
-from src.metrics.IoUBenchmark import __iou
-from src.metrics.MultiValueBenchmark import __multi_value_benchmark
-from src.metrics.Mean import __mean
+from evops.metrics.DefaultMetrics import __precision, __accuracy, __recall, __fScore
+from evops.metrics.DiceBenchmark import __dice
+from evops.metrics.IoUBenchmark import __iou
+from evops.metrics.MultiValueBenchmark import __multi_value_benchmark
+from evops.metrics.Mean import __mean
+
+import numpy as np
 
 
 UNSEGMENTED_LABEL = 0

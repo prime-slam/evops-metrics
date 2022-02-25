@@ -1,9 +1,7 @@
-from typing import Dict, Any
-
-import numpy as np
+from typing import Any
 from nptyping import NDArray
 
-from src.utils.metrics_utils import __group_indices_by_labels
+import numpy as np
 
 
 def __precision(
