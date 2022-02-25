@@ -2,14 +2,14 @@ import numpy as np
 import open3d as o3d
 import pytest
 
-from src.metrics.metrics import multi_value
+from evops.metrics import multi_value
 
 
 def test_multi_value_benchmark_real_data():
-    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = o3d.io.read_point_cloud("tests/data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
-    pred_labels = np.load("data/pred_0.npy")
-    gt_labels = np.load("data/gt_0.npy")
+    pred_labels = np.load("tests/data/pred_0.npy")
+    gt_labels = np.load("tests/data/gt_0.npy")
 
     result = multi_value(point_cloud, pred_labels, gt_labels)
 

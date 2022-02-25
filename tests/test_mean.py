@@ -2,8 +2,7 @@ import numpy as np
 import pytest
 import open3d as o3d
 
-from src.metrics.metrics import mean, iou
-from src.utils.metrics_utils import __group_indices_by_labels
+from evops.metrics import mean, iou
 
 
 def test_mean_simple_array():
@@ -115,9 +114,9 @@ def test_mean_gt_labels_assert():
 
 
 def test_mean_iou_real_data():
-    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = o3d.io.read_point_cloud("tests/data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
-    pred_labels = np.load("data/pred_0.npy")
-    gt_labels = np.load("data/gt_0.npy")
+    pred_labels = np.load("tests/data/pred_0.npy")
+    gt_labels = np.load("tests/data/gt_0.npy")
 
     assert 0.0 == pytest.approx(mean(point_cloud, pred_labels, gt_labels, iou), 0.01)

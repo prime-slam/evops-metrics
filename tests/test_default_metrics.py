@@ -2,13 +2,13 @@ import numpy as np
 import pytest
 import open3d as o3d
 
-from src.metrics.metrics import (
+from evops.metrics import (
     precision,
     accuracy,
     recall,
     fScore,
 )
-from src.utils.metrics_utils import __group_indices_by_labels
+from evops.utils.metrics_utils import __group_indices_by_labels
 
 
 def test_full_precision_result():
@@ -84,10 +84,10 @@ def test_fScore_result():
 
 
 def test_precision_real_data():
-    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = o3d.io.read_point_cloud("tests/data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
-    pred_labels = np.load("data/pred_0.npy")
-    gt_labels = np.load("data/gt_0.npy")
+    pred_labels = np.load("tests/data/pred_0.npy")
+    gt_labels = np.load("tests/data/gt_0.npy")
     pred = __group_indices_by_labels(pred_labels)
     gt = __group_indices_by_labels(gt_labels)
 
@@ -95,10 +95,10 @@ def test_precision_real_data():
 
 
 def test_accuracy_real_data():
-    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = o3d.io.read_point_cloud("tests/data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
-    pred_labels = np.load("data/pred_0.npy")
-    gt_labels = np.load("data/gt_0.npy")
+    pred_labels = np.load("tests/data/pred_0.npy")
+    gt_labels = np.load("tests/data/gt_0.npy")
     pred = __group_indices_by_labels(pred_labels)
     gt = __group_indices_by_labels(gt_labels)
 
@@ -106,10 +106,10 @@ def test_accuracy_real_data():
 
 
 def test_recall_real_data():
-    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = o3d.io.read_point_cloud("tests/data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
-    pred_labels = np.load("data/pred_0.npy")
-    gt_labels = np.load("data/gt_0.npy")
+    pred_labels = np.load("tests/data/pred_0.npy")
+    gt_labels = np.load("tests/data/gt_0.npy")
     pred = __group_indices_by_labels(pred_labels)
     gt = __group_indices_by_labels(gt_labels)
 
@@ -117,10 +117,10 @@ def test_recall_real_data():
 
 
 def test_fScore_real_data():
-    point_cloud = o3d.io.read_point_cloud("data/0.pcd")
+    point_cloud = o3d.io.read_point_cloud("tests/data/0.pcd")
     point_cloud = np.asarray(point_cloud.points)
-    pred_labels = np.load("data/pred_0.npy")
-    gt_labels = np.load("data/gt_0.npy")
+    pred_labels = np.load("tests/data/pred_0.npy")
+    gt_labels = np.load("tests/data/gt_0.npy")
     pred = __group_indices_by_labels(pred_labels)
     gt = __group_indices_by_labels(gt_labels)
 
