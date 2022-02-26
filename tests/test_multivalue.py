@@ -28,3 +28,18 @@ def test_multi_value_benchmark():
 
     result = multi_value(point_cloud, pred_labels, gt_labels)
     assert 1 == pytest.approx(result["under_segmented"], 0.01)
+
+
+def test_multi_value_null_benchmark():
+    point_cloud = np.eye(4, 3)
+    pred_labels = np.array([0, 0, 0, 0])
+    gt_labels = np.array([0, 0, 0, 0])
+
+    result = multi_value(point_cloud, pred_labels, gt_labels)
+
+    assert 0 == pytest.approx(result["precision"], 0.01)
+    assert 0 == pytest.approx(result["recall"], 0.01)
+    assert 0 == pytest.approx(result["under_segmented"], 0.01)
+    assert 0 == pytest.approx(result["over_segmented"], 0.01)
+    assert 0 == pytest.approx(result["missed"], 0.01)
+    assert 0 == pytest.approx(result["noise"], 0.01)

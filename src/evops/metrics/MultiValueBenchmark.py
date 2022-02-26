@@ -75,10 +75,14 @@ def __multi_value_benchmark(
             over_segmented_amount += 1
 
     return {
-        "precision": correctly_segmented_amount / predicted_amount,
-        "recall": correctly_segmented_amount / gt_amount,
-        "under_segmented": under_segmented_amount / predicted_amount,
-        "over_segmented": over_segmented_amount / gt_amount,
-        "missed": missed_amount / gt_amount,
-        "noise": noise_amount / predicted_amount,
+        "precision": correctly_segmented_amount / predicted_amount
+        if predicted_amount != 0
+        else 0,
+        "recall": correctly_segmented_amount / gt_amount if gt_amount != 0 else 0,
+        "under_segmented": under_segmented_amount / predicted_amount
+        if predicted_amount != 0
+        else 0,
+        "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0,
+        "missed": missed_amount / gt_amount if gt_amount != 0 else 0,
+        "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0,
     }
