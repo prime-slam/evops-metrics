@@ -14,9 +14,9 @@
 from typing import Any, Callable
 from nptyping import NDArray
 from evops.utils.metrics_utils import __group_indices_by_labels
+from evops.metrics import constants
 
 import numpy as np
-import evops.metrics.metrics
 
 
 def __mean(
@@ -30,10 +30,10 @@ def __mean(
 ) -> np.float64:
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
-    if evops.metrics.metrics.UNSEGMENTED_LABEL in plane_predicted_dict:
-        del plane_predicted_dict[evops.metrics.metrics.UNSEGMENTED_LABEL]
-    if evops.metrics.metrics.UNSEGMENTED_LABEL in plane_gt_dict:
-        del plane_gt_dict[evops.metrics.metrics.UNSEGMENTED_LABEL]
+    if constants.UNSEGMENTED_LABEL in plane_predicted_dict:
+        del plane_predicted_dict[constants.UNSEGMENTED_LABEL]
+    if constants.UNSEGMENTED_LABEL in plane_gt_dict:
+        del plane_gt_dict[constants.UNSEGMENTED_LABEL]
     unique_labels = np.unique(pred_labels)
     mean_array = np.empty((1, 0), np.float64)
 

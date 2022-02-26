@@ -23,9 +23,6 @@ from evops.metrics.Mean import __mean
 import numpy as np
 
 
-UNSEGMENTED_LABEL = 0
-
-
 def iou(
     pc_points: NDArray[(Any, 3), np.float64],
     pred_indices: NDArray[Any, np.int32],
