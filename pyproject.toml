@@ -9,16 +9,16 @@ license = "APACHE"
 python = "^3.6"
 numpy = "1.19.*"
 nptyping = "^1.4.4"
-open3d = "^0.14.1"
+importlib-metadata = "4.8.3"
 
 [tool.poetry.dev-dependencies]
-python = "^3.9"
-black = "^22.1.0"
-pre-commit = "^2.17.0"
+open3d = "^0.14.1"
+black = {version = "^22.1.0", python = "^3.9"}
+pre-commit = {version = "^2.17.0", python = "^3.9"}
 pytest = "^7.0.0"
 myst-nb = {version = "^0.13.2", python = "^3.9"}
-sphinx-autoapi = "^1.8.4"
-sphinx-rtd-theme = "^1.0.0"
+sphinx-autoapi = {version = "^1.8.4", python = "^3.9"}
+sphinx-rtd-theme = {version = "^1.0.0", python = "^3.9"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
