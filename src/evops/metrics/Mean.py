@@ -34,15 +34,16 @@ def __mean(
         del plane_predicted_dict[constants.UNSEGMENTED_LABEL]
     if constants.UNSEGMENTED_LABEL in plane_gt_dict:
         del plane_gt_dict[constants.UNSEGMENTED_LABEL]
-    unique_labels = np.unique(pred_labels)
-    mean_array = np.empty((1, 0), np.float64)
+    mean_array = np.zeros(len(plane_predicted_dict.keys()), np.float64)
 
-    for label in unique_labels:
-        if label in plane_gt_dict:
-            mean_array = np.append(
-                mean_array,
-                metric(pc_points, plane_predicted_dict[label], plane_gt_dict[label]),
-            )
+    for label_index, label in enumerate(plane_predicted_dict.keys()):
+        max_metric_value = 0
+        for gt_label in plane_gt_dict.keys():
+            metric_value = metric(pc_points, plane_predicted_dict[label], plane_gt_dict[gt_label])
+            if metric_value > max_metric_value:
+                max_metric_value = metric_value
+
+        mean_array[label_index] = max_metric_value
 
     if mean_array.size == 0:
         return 0
