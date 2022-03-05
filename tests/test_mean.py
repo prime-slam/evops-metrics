@@ -27,8 +27,8 @@ def test_mean_half_result():
 
 def test_mean_null_result():
     pc_points = np.eye(4, 3)
-    pred_labels = np.array([1, 2, 3, 4])
-    gt_labels = np.array([5, 6, 7, 8])
+    pred_labels = np.array([0, 0, 0, 0])
+    gt_labels = np.array([1, 1, 1, 1])
 
     metric = iou
 
@@ -119,4 +119,4 @@ def test_mean_iou_real_data():
     pred_labels = np.load("tests/data/pred_0.npy")
     gt_labels = np.load("tests/data/gt_0.npy")
 
-    assert 0.0 == pytest.approx(mean(point_cloud, pred_labels, gt_labels, iou), 0.01)
+    assert 0.87 == pytest.approx(mean(point_cloud, pred_labels, gt_labels, iou), 0.01)
