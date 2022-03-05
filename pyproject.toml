@@ -6,7 +6,7 @@ authors = ["Dmitriy Jarosh", "Pavel Mokeev"]
 license = "APACHE"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.1"
 numpy = "1.19.*"
 nptyping = "^1.4.4"
 importlib-metadata = "4.8.3"
