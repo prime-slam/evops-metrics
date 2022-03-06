@@ -21,7 +21,9 @@ jobs:
         pre-commit run --all-files --color always --verbose --show-diff-on-failure
 
     - name: Install package
-      run: poetry install
+      run: |
+        poetry env use 3.9
+        poetry install
 
     - name: Test with pytest
       run: poetry run pytest tests/
