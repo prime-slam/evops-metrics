@@ -6,9 +6,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u"evops"
-copyright = u"2022, Pavel Mokeev, Dmitrii Iarosh, Anastasiia Kornilova"
-author = u"Dmitriy Jarosh, Pavel Mokeev"
+project = "evops"
+copyright = "2022, Pavel Mokeev, Dmitrii Iarosh, Anastasiia Kornilova"
+author = "Dmitriy Jarosh, Pavel Mokeev"
 
 # -- General configuration ---------------------------------------------------
 

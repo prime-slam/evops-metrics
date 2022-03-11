@@ -13,50 +13,38 @@
 # limitations under the License.
 from typing import Any
 from nptyping import NDArray
+from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score
 
 import numpy as np
 
 
 def __precision(
     pc_points: NDArray[(Any, 3), np.float64],
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
-    truePositive = np.intersect1d(pred_indices, gt_indices).size
-
-    return truePositive / pred_indices.size
+    return precision_score(gt_labels, pred_labels, average="micro")
 
 
 def __accuracy(
     pc_points: NDArray[(Any, 3), np.float64],
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
-    truePositive = np.intersect1d(pred_indices, gt_indices).size
-    trueNegative = pc_points.size - np.union1d(pred_indices, gt_indices).size
-
-    return (truePositive + trueNegative) / pc_points.size
+    return accuracy_score(gt_labels, pred_labels)
 
 
 def __recall(
     pc_points: NDArray[(Any, 3), np.float64],
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
-    truePositive = np.intersect1d(pred_indices, gt_indices).size
-
-    return truePositive / gt_indices.size
+    return recall_score(gt_labels, pred_labels, average="micro")
 
 
 def __fScore(
     pc_points: NDArray[(Any, 3), np.float64],
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
-    precision_value = __precision(pc_points, pred_indices, gt_indices)
-    recall_value = __recall(pc_points, pred_indices, gt_indices)
-
-    if precision_value + recall_value == 0:
-        return 0
-
-    return 2 * precision_value * recall_value / (precision_value + recall_value)
+    return f1_score(gt_labels, pred_labels, average="micro")
