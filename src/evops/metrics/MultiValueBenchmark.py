@@ -21,7 +21,6 @@ import numpy as np
 
 
 def __multi_value_benchmark(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     overlap_threshold: np.float64 = 0.8,

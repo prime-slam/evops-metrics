@@ -18,7 +18,6 @@ import numpy as np
 
 
 def __iou(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:

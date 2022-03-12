@@ -20,7 +20,6 @@ import numpy as np
 
 
 def __mean(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     metric: Callable[
@@ -39,9 +38,7 @@ def __mean(
     for label_index, label in enumerate(plane_predicted_dict.keys()):
         max_metric_value = 0
         for gt_label in plane_gt_dict.keys():
-            metric_value = metric(
-                pc_points, plane_predicted_dict[label], plane_gt_dict[gt_label]
-            )
+            metric_value = metric(plane_predicted_dict[label], plane_gt_dict[gt_label])
             max_metric_value = max(max_metric_value, metric_value)
 
         mean_array[label_index] = max_metric_value

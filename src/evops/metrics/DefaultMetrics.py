@@ -19,7 +19,6 @@ import numpy as np
 
 
 def __precision(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
@@ -27,7 +26,6 @@ def __precision(
 
 
 def __accuracy(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
@@ -35,7 +33,6 @@ def __accuracy(
 
 
 def __recall(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
@@ -43,7 +40,6 @@ def __recall(
 
 
 def __fScore(
-    pc_points: NDArray[(Any, 3), np.float64],
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ) -> np.float64:
