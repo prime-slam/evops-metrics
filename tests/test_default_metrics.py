@@ -8,7 +8,7 @@ from evops.metrics import (
     recall,
     fScore,
 )
-from evops.utils.metrics_utils import __group_indices_by_labels
+from evops.utils.MetricsUtils import __group_indices_by_labels
 
 
 def test_full_precision_result():

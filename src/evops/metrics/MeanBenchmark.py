@@ -13,7 +13,7 @@
 # limitations under the License.
 from typing import Any, Callable
 from nptyping import NDArray
-from evops.utils.metrics_utils import __group_indices_by_labels
+from evops.utils.MetricsUtils import __group_indices_by_labels
 from evops.metrics import constants
 
 import numpy as np

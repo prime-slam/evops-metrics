@@ -14,7 +14,7 @@
 from typing import Any, Dict
 from nptyping import NDArray
 
-from evops.utils.metrics_utils import __group_indices_by_labels, __are_nearly_overlapped
+from evops.utils.MetricsUtils import __group_indices_by_labels, __are_nearly_overlapped
 from evops.metrics import constants
 
 import numpy as np

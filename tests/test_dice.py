@@ -3,7 +3,7 @@ import pytest
 import open3d as o3d
 
 from evops.metrics import dice
-from evops.utils.metrics_utils import __group_indices_by_labels
+from evops.utils.MetricsUtils import __group_indices_by_labels
 
 
 def test_assert_dice_exception():

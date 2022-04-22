@@ -14,13 +14,15 @@
 from typing import Callable, Any
 from nptyping import NDArray
 
-from evops.metrics.DefaultMetrics import __precision, __accuracy, __recall, __fScore
+from evops.metrics.DefaultBenchmark import __precision, __recall, __fScore
 from evops.metrics.DiceBenchmark import __dice
 from evops.metrics.IoUBenchmark import __iou
 from evops.metrics.MultiValueBenchmark import __multi_value_benchmark
-from evops.metrics.Mean import __mean
+from evops.metrics.MeanBenchmark import __mean
 
 import numpy as np
+
+from evops.utils.IoUOverlap import __iou_overlap
 
 
 def iou(
@@ -66,86 +68,84 @@ def dice(
 
 
 def precision(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    statistics: str,
 ) -> np.float64:
     """
     :param pc_points: source point cloud
-    :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: indices of points belonging to the reference plane
+    :param pred_labels: labels of points that belong to one planes obtained as a result of segmentation
+    :param gt_labels: labels of points belonging to the reference planes
+    :param statistics: helper function to calculate statistics
     :return: precision metric value for plane
     """
     assert (
-        len(pred_indices.shape) == 1
+        len(pred_labels.shape) == 1
     ), "Incorrect predicted label array size, expected (n)"
     assert (
-        len(gt_indices.shape) == 1
+        len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
-    assert pred_indices.size != 0, "Predicted indices array size must not be zero"
-
-    return __precision(pred_indices, gt_indices)
-
-
-def accuracy(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
-) -> np.float64:
-    """
-    :param pc_points: source point cloud
-    :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: indices of points belonging to the reference plane
-    :return: accuracy metric value for plane
-    """
+    assert pred_labels.size != 0, "Predicted labels array size must not be zero"
+    statistics_functions = {"iou": __iou_overlap}
     assert (
-        len(pred_indices.shape) == 1
-    ), "Incorrect predicted label array size, expected (n)"
-    assert (
-        len(gt_indices.shape) == 1
-    ), "Incorrect ground truth label array size, expected (n)"
+        statistics not in statistics_functions
+    ), "Incorrect name of statistics function"
 
-    return __accuracy(pred_indices, gt_indices)
+    return __precision(pred_labels, gt_labels, statistics_functions[statistics])
 
 
 def recall(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    statistics: str,
 ) -> np.float64:
     """
     :param pc_points: source point cloud
-    :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: indices of points belonging to the reference plane
+    :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
+    :param gt_labels: indices of points belonging to the reference plane
+    :param statistics: helper function to calculate statistics
     :return: recall metric value for plane
     """
     assert (
-        len(pred_indices.shape) == 1
+        len(pred_labels.shape) == 1
     ), "Incorrect predicted label array size, expected (n)"
     assert (
-        len(gt_indices.shape) == 1
+        len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
-    assert gt_indices.size != 0, "Ground truth indices array size must not be zero"
+    assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
+    statistics_functions = {"iou": __iou_overlap}
+    assert (
+        statistics not in statistics_functions
+    ), "Incorrect name of statistics function"
 
-    return __recall(pred_indices, gt_indices)
+    return __recall(pred_labels, gt_labels, statistics_functions[statistics])
 
 
 def fScore(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    statistics: str,
 ) -> np.float64:
     """
     :param pc_points: source point cloud
-    :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: indices of points belonging to the reference plane
+    :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
+    :param gt_labels: indices of points belonging to the reference plane
+    :param statistics: helper function to calculate statistics
     :return: f-score metric value for plane
     """
     assert (
-        len(pred_indices.shape) == 1
+        len(pred_labels.shape) == 1
     ), "Incorrect predicted label array size, expected (n)"
     assert (
-        len(gt_indices.shape) == 1
+        len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
-    assert gt_indices.size != 0, "Ground truth indices array size must not be zero"
+    assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
+    statistics_functions = {"iou": __iou_overlap}
+    assert (
+        statistics not in statistics_functions
+    ), "Incorrect name of statistics function"
 
-    return __fScore(pred_indices, gt_indices)
+    return __fScore(pred_labels, gt_labels, statistics_functions[statistics])
 
 
 def mean(

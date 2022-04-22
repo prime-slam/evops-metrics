@@ -11,9 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Any
+from typing import Callable, Any
 from nptyping import NDArray
-from sklearn.metrics import precision_score, accuracy_score, recall_score, f1_score
 
 import numpy as np
 
@@ -21,26 +20,38 @@ import numpy as np
 def __precision(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
+    statistic_func: Callable[
+        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
+        tuple[np.int32, np.int32, np.int32],
+    ],
 ) -> np.float64:
-    return precision_score(gt_labels, pred_labels, average="micro")
+    true_positive, false_positive, _ = statistic_func(pred_labels, gt_labels)
 
-
-def __accuracy(
-    pred_labels: NDArray[Any, np.int32],
-    gt_labels: NDArray[Any, np.int32],
-) -> np.float64:
-    return accuracy_score(gt_labels, pred_labels)
+    return true_positive / (true_positive + false_positive)
 
 
 def __recall(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
+    statistic_func: Callable[
+        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
+        tuple[np.int32, np.int32, np.int32],
+    ],
 ) -> np.float64:
-    return recall_score(gt_labels, pred_labels, average="micro")
+    true_positive, _, false_negative = statistic_func(pred_labels, gt_labels)
+
+    return true_positive / (true_positive + false_negative)
 
 
 def __fScore(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
+    statistic_func: Callable[
+        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
+        tuple[np.int32, np.int32, np.int32],
+    ],
 ) -> np.float64:
-    return f1_score(gt_labels, pred_labels, average="micro")
+    precision = __precision(pred_labels, gt_labels, statistic_func)
+    recall = __recall(pred_labels, gt_labels, statistic_func)
+
+    return 2 * precision * recall / (precision + recall)
