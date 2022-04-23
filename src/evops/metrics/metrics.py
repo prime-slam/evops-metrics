@@ -22,7 +22,9 @@ from evops.metrics.MeanBenchmark import __mean
 
 import numpy as np
 
-from evops.utils.IoUOverlap import __iou_overlap
+from evops.utils.MetricsUtils import __statistics_functions
+
+print(__statistics_functions)
 
 
 def iou(
@@ -76,7 +78,7 @@ def precision(
     :param pc_points: source point cloud
     :param pred_labels: labels of points that belong to one planes obtained as a result of segmentation
     :param gt_labels: labels of points belonging to the reference planes
-    :param statistics: helper function to calculate statistics
+    :param statistics: helper function to calculate statistics: {'iou'}
     :return: precision metric value for plane
     """
     assert (
@@ -86,12 +88,11 @@ def precision(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert pred_labels.size != 0, "Predicted labels array size must not be zero"
-    statistics_functions = {"iou": __iou_overlap}
     assert (
-        statistics not in statistics_functions
+        statistics not in __statistics_functions
     ), "Incorrect name of statistics function"
 
-    return __precision(pred_labels, gt_labels, statistics_functions[statistics])
+    return __precision(pred_labels, gt_labels, __statistics_functions[statistics])
 
 
 def recall(
@@ -103,7 +104,7 @@ def recall(
     :param pc_points: source point cloud
     :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
     :param gt_labels: indices of points belonging to the reference plane
-    :param statistics: helper function to calculate statistics
+    :param statistics: helper function to calculate statistics: {'iou'}
     :return: recall metric value for plane
     """
     assert (
@@ -113,12 +114,11 @@ def recall(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
-    statistics_functions = {"iou": __iou_overlap}
     assert (
-        statistics not in statistics_functions
+        statistics not in __statistics_functions
     ), "Incorrect name of statistics function"
 
-    return __recall(pred_labels, gt_labels, statistics_functions[statistics])
+    return __recall(pred_labels, gt_labels, __statistics_functions[statistics])
 
 
 def fScore(
@@ -130,7 +130,7 @@ def fScore(
     :param pc_points: source point cloud
     :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
     :param gt_labels: indices of points belonging to the reference plane
-    :param statistics: helper function to calculate statistics
+    :param statistics: helper function to calculate statistics: {'iou'}
     :return: f-score metric value for plane
     """
     assert (
@@ -140,12 +140,11 @@ def fScore(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
-    statistics_functions = {"iou": __iou_overlap}
     assert (
-        statistics not in statistics_functions
+        statistics not in __statistics_functions
     ), "Incorrect name of statistics function"
 
-    return __fScore(pred_labels, gt_labels, statistics_functions[statistics])
+    return __fScore(pred_labels, gt_labels, __statistics_functions[statistics])
 
 
 def mean(

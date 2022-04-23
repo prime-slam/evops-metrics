@@ -16,6 +16,10 @@ from nptyping import NDArray
 
 import numpy as np
 
+from evops.utils.IoUOverlap import __iou_overlap
+
+__statistics_functions = {"iou": __iou_overlap}
+
 
 def __group_indices_by_labels(
     labels_array: NDArray[Any, np.int32],

@@ -49,12 +49,9 @@ def __iou_overlap(
 
             if IoU_value == 0:
                 false_negative += 1
-            elif IoU_value >= IOU_THRESHOLD:
-                if not is_already_true_positive:
-                    true_positive += 1
-                    is_already_true_positive = True
-                else:
-                    false_positive += 1
+            elif IoU_value >= IOU_THRESHOLD and not is_already_true_positive:
+                true_positive += 1
+                is_already_true_positive = True
             else:
                 false_positive += 1
 
