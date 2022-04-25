@@ -25,9 +25,9 @@ def __precision(
         tuple[np.int32, np.int32, np.int32],
     ],
 ) -> np.float64:
-    true_positive, false_positive, _ = statistic_func(pred_labels, gt_labels)
+    true_positive, _, _ = statistic_func(pred_labels, gt_labels)
 
-    return true_positive / (true_positive + false_positive)
+    return true_positive / pred_labels.size
 
 
 def __recall(
@@ -38,9 +38,9 @@ def __recall(
         tuple[np.int32, np.int32, np.int32],
     ],
 ) -> np.float64:
-    true_positive, _, false_negative = statistic_func(pred_labels, gt_labels)
+    true_positive, _, _ = statistic_func(pred_labels, gt_labels)
 
-    return true_positive / (true_positive + false_negative)
+    return true_positive / gt_labels.size
 
 
 def __fScore(
