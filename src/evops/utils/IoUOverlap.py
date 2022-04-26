@@ -30,6 +30,8 @@ def __iou_overlap(
     :return: (true positive, false positive, false negative) received using pred_indices and gt_indices
     """
     true_positive = 0
+    false_positive = 0
+    false_negative = 0
     unique_gt_labels = np.unique(gt_labels)
     unique_gt_labels = np.delete(
         unique_gt_labels, np.where(unique_gt_labels == UNSEGMENTED_LABEL)[0]
@@ -41,6 +43,7 @@ def __iou_overlap(
 
     for gt_label in unique_gt_labels:
         is_already_true_positive = False
+        is_detected = False
         gt_indices = np.where(gt_labels == gt_label)[0]
         for pred_label in unique_pred_labels:
             pred_indices = np.where(pred_labels == pred_label)[0]
@@ -50,5 +53,11 @@ def __iou_overlap(
             if IoU_value >= IOU_THRESHOLD and not is_already_true_positive:
                 true_positive += 1
                 is_already_true_positive = True
+                is_detected = True
+            else:
+                false_positive += 1
 
-    return true_positive, _, _
+        if not is_detected:
+            false_negative += 1
+
+    return true_positive, false_positive, false_negative
