@@ -16,7 +16,7 @@ from nptyping import NDArray
 
 import numpy as np
 
-from evops.metrics.constants import UNSEGMENTED_LABEL
+import evops.metrics.constants
 
 
 def __precision(
@@ -27,14 +27,17 @@ def __precision(
         tuple[np.int32, np.int32, np.int32],
     ],
 ) -> np.float64:
-    true_positive, false_positive, _ = statistic_func(pred_labels, gt_labels)
-    pred_labels = np.delete(pred_labels, np.where(pred_labels == UNSEGMENTED_LABEL)[0])
-
+    pred_labels = np.delete(
+        pred_labels,
+        np.where(pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
     assert (
-        pred_labels.size == true_positive + false_positive
-    ), "TP + FP not equals all detection array size"
+        pred_labels.size != 0
+    ), "Incorrect predicted label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
-    return true_positive / (true_positive + false_positive)
+    true_positive, _, _ = statistic_func(pred_labels, gt_labels)
+
+    return true_positive / pred_labels.size
 
 
 def __recall(
@@ -45,14 +48,16 @@ def __recall(
         tuple[np.int32, np.int32, np.int32],
     ],
 ) -> np.float64:
-    true_positive, _, false_negative = statistic_func(pred_labels, gt_labels)
-    gt_labels = np.delete(gt_labels, np.where(gt_labels == UNSEGMENTED_LABEL)[0])
-
+    gt_labels = np.delete(
+        gt_labels, np.where(gt_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0]
+    )
     assert (
-        gt_labels.size == true_positive + false_negative
-    ), "TP + FP not equals all ground_truth array size"
+        gt_labels.size != 0
+    ), "Incorrect ground truth label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
-    return true_positive / (true_positive + false_negative)
+    true_positive, _, _ = statistic_func(pred_labels, gt_labels)
+
+    return true_positive / gt_labels.size
 
 
 def __fScore(

@@ -24,8 +24,6 @@ import numpy as np
 
 from evops.utils.MetricsUtils import __statistics_functions
 
-print(__statistics_functions)
-
 
 def iou(
     pred_indices: NDArray[Any, np.int32],
@@ -88,9 +86,7 @@ def precision(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert pred_labels.size != 0, "Predicted labels array size must not be zero"
-    assert (
-        statistics not in __statistics_functions
-    ), "Incorrect name of statistics function"
+    assert statistics in __statistics_functions, "Incorrect name of statistics function"
 
     return __precision(pred_labels, gt_labels, __statistics_functions[statistics])
 
@@ -114,9 +110,7 @@ def recall(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
-    assert (
-        statistics not in __statistics_functions
-    ), "Incorrect name of statistics function"
+    assert statistics in __statistics_functions, "Incorrect name of statistics function"
 
     return __recall(pred_labels, gt_labels, __statistics_functions[statistics])
 
@@ -140,9 +134,7 @@ def fScore(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
-    assert (
-        statistics not in __statistics_functions
-    ), "Incorrect name of statistics function"
+    assert statistics in __statistics_functions, "Incorrect name of statistics function"
 
     return __fScore(pred_labels, gt_labels, __statistics_functions[statistics])
 
