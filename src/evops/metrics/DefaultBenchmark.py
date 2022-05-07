@@ -24,7 +24,7 @@ def __precision(
     gt_labels: NDArray[Any, np.int32],
     statistic_func: Callable[
         [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        tuple[np.int32, np.int32, np.int32],
+        np.int32,
     ],
 ) -> np.float64:
     pred_labels = np.delete(
@@ -35,9 +35,14 @@ def __precision(
         pred_labels.size != 0
     ), "Incorrect predicted label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
-    true_positive, _, _ = statistic_func(pred_labels, gt_labels)
+    true_positive = statistic_func(pred_labels, gt_labels)
+    pred_planes = np.unique(pred_labels)
+    pred_planes = np.delete(
+        pred_planes,
+        np.where(pred_planes == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
 
-    return true_positive / pred_labels.size
+    return true_positive / pred_planes.size
 
 
 def __recall(
@@ -45,7 +50,7 @@ def __recall(
     gt_labels: NDArray[Any, np.int32],
     statistic_func: Callable[
         [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        tuple[np.int32, np.int32, np.int32],
+        np.int32,
     ],
 ) -> np.float64:
     gt_labels = np.delete(
@@ -55,9 +60,14 @@ def __recall(
         gt_labels.size != 0
     ), "Incorrect ground truth label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
-    true_positive, _, _ = statistic_func(pred_labels, gt_labels)
+    true_positive = statistic_func(pred_labels, gt_labels)
+    gt_planes = np.unique(gt_labels)
+    gt_planes = np.delete(
+        gt_planes,
+        np.where(gt_planes == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
 
-    return true_positive / gt_labels.size
+    return true_positive / gt_planes.size
 
 
 def __fScore(
@@ -65,7 +75,7 @@ def __fScore(
     gt_labels: NDArray[Any, np.int32],
     statistic_func: Callable[
         [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        tuple[np.int32, np.int32, np.int32],
+        np.int32,
     ],
 ) -> np.float64:
     precision = __precision(pred_labels, gt_labels, statistic_func)

@@ -23,7 +23,7 @@ from evops.metrics.IoUBenchmark import __iou
 def __iou_overlap(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-) -> (np.int32, np.int32, np.int32):
+) -> np.int32:
     """
     :param pred_labels: labels of points corresponding to segmented planes
     :param gt_labels: indices of points corresponding to ground truth planes
@@ -40,6 +40,7 @@ def __iou_overlap(
         unique_pred_labels,
         np.where(unique_pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
     )
+    pred_used = set()
 
     for gt_label in unique_gt_labels:
         is_already_true_positive = False
@@ -51,9 +52,11 @@ def __iou_overlap(
 
             if (
                 IoU_value >= evops.metrics.constants.IOU_THRESHOLD
+                and pred_label not in pred_used
                 and not is_already_true_positive
             ):
                 true_positive += 1
                 is_already_true_positive = True
+                pred_used.add(pred_label)
 
-    return true_positive, 0, 0
+    return true_positive
