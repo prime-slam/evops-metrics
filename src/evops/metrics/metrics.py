@@ -70,13 +70,13 @@ def dice(
 def precision(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    statistics: str,
+    tp_condition: str,
 ) -> np.float64:
     """
     :param pc_points: source point cloud
     :param pred_labels: labels of points that belong to one planes obtained as a result of segmentation
     :param gt_labels: labels of points belonging to the reference planes
-    :param statistics: helper function to calculate statistics: {'iou'}
+    :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: precision metric value for plane
     """
     assert (
@@ -86,21 +86,21 @@ def precision(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert pred_labels.size != 0, "Predicted labels array size must not be zero"
-    assert statistics in __statistics_functions, "Incorrect name of statistics function"
+    assert tp_condition in __statistics_functions, "Incorrect name of tp condition"
 
-    return __precision(pred_labels, gt_labels, __statistics_functions[statistics])
+    return __precision(pred_labels, gt_labels, tp_condition)
 
 
 def recall(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    statistics: str,
+    tp_condition: str,
 ) -> np.float64:
     """
     :param pc_points: source point cloud
     :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
     :param gt_labels: indices of points belonging to the reference plane
-    :param statistics: helper function to calculate statistics: {'iou'}
+    :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: recall metric value for plane
     """
     assert (
@@ -110,21 +110,21 @@ def recall(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
-    assert statistics in __statistics_functions, "Incorrect name of statistics function"
+    assert tp_condition in __statistics_functions, "Incorrect name of tp condition"
 
-    return __recall(pred_labels, gt_labels, __statistics_functions[statistics])
+    return __recall(pred_labels, gt_labels, tp_condition)
 
 
 def fScore(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    statistics: str,
+    tp_condition: str,
 ) -> np.float64:
     """
     :param pc_points: source point cloud
     :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
     :param gt_labels: indices of points belonging to the reference plane
-    :param statistics: helper function to calculate statistics: {'iou'}
+    :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: f-score metric value for plane
     """
     assert (
@@ -134,9 +134,9 @@ def fScore(
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
     assert gt_labels.size != 0, "Ground truth indices array size must not be zero"
-    assert statistics in __statistics_functions, "Incorrect name of statistics function"
+    assert tp_condition in __statistics_functions, "Incorrect name of tp condition"
 
-    return __fScore(pred_labels, gt_labels, __statistics_functions[statistics])
+    return __fScore(pred_labels, gt_labels, tp_condition)
 
 
 def mean(

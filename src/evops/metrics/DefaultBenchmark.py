@@ -11,22 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Callable, Any
+from typing import Any
 from nptyping import NDArray
 
 import numpy as np
 
 import evops.metrics.constants
+from evops.utils.MetricsUtils import __get_tp
 
 
 def __precision(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    statistic_func: Callable[
-        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        np.int32,
-    ],
+    tp_condition: str,
 ) -> np.float64:
+    true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
+
     pred_labels = np.delete(
         pred_labels,
         np.where(pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
@@ -35,24 +35,16 @@ def __precision(
         pred_labels.size != 0
     ), "Incorrect predicted label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
-    true_positive = statistic_func(pred_labels, gt_labels)
-    pred_planes = np.unique(pred_labels)
-    pred_planes = np.delete(
-        pred_planes,
-        np.where(pred_planes == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-
-    return true_positive / pred_planes.size
+    return true_positive / np.unique(pred_labels).size
 
 
 def __recall(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    statistic_func: Callable[
-        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        np.int32,
-    ],
+    tp_condition: str,
 ) -> np.float64:
+    true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
+
     gt_labels = np.delete(
         gt_labels, np.where(gt_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0]
     )
@@ -60,25 +52,15 @@ def __recall(
         gt_labels.size != 0
     ), "Incorrect ground truth label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
-    true_positive = statistic_func(pred_labels, gt_labels)
-    gt_planes = np.unique(gt_labels)
-    gt_planes = np.delete(
-        gt_planes,
-        np.where(gt_planes == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-
-    return true_positive / gt_planes.size
+    return true_positive / np.unique(gt_labels).size
 
 
 def __fScore(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    statistic_func: Callable[
-        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        np.int32,
-    ],
+    tp_condition: str,
 ) -> np.float64:
-    precision = __precision(pred_labels, gt_labels, statistic_func)
-    recall = __recall(pred_labels, gt_labels, statistic_func)
+    precision = __precision(pred_labels, gt_labels, tp_condition)
+    recall = __recall(pred_labels, gt_labels, tp_condition)
 
     return 2 * precision * recall / (precision + recall)

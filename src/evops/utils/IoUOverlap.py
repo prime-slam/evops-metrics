@@ -21,42 +21,12 @@ from evops.metrics.IoUBenchmark import __iou
 
 
 def __iou_overlap(
-    pred_labels: NDArray[Any, np.int32],
-    gt_labels: NDArray[Any, np.int32],
-) -> np.int32:
+    pred_indices: NDArray[Any, np.int32],
+    gt_indices: NDArray[Any, np.int32],
+) -> bool:
     """
-    :param pred_labels: labels of points corresponding to segmented planes
-    :param gt_labels: indices of points corresponding to ground truth planes
-    :return: (true positive, false positive, false negative) received using pred_indices and gt_indices
+    :param pred_indices: indices of points belonging to the given predicted label
+    :param gt_indices: indices of points belonging to the given predicted label
+    :return: true if IoU >= evops.metrics.constants.IOU_THRESHOLD
     """
-    true_positive = 0
-    unique_gt_labels = np.unique(gt_labels)
-    unique_gt_labels = np.delete(
-        unique_gt_labels,
-        np.where(unique_gt_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-    unique_pred_labels = np.unique(pred_labels)
-    unique_pred_labels = np.delete(
-        unique_pred_labels,
-        np.where(unique_pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-    pred_used = set()
-
-    for gt_label in unique_gt_labels:
-        is_already_true_positive = False
-        gt_indices = np.where(gt_labels == gt_label)[0]
-        for pred_label in unique_pred_labels:
-            pred_indices = np.where(pred_labels == pred_label)[0]
-
-            IoU_value = __iou(pred_indices, gt_indices)
-
-            if (
-                IoU_value >= evops.metrics.constants.IOU_THRESHOLD
-                and pred_label not in pred_used
-                and not is_already_true_positive
-            ):
-                true_positive += 1
-                is_already_true_positive = True
-                pred_used.add(pred_label)
-
-    return true_positive
+    return __iou(pred_indices, gt_indices) >= evops.metrics.constants.IOU_THRESHOLD

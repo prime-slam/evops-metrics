@@ -19,16 +19,6 @@ def test_full_precision_iou_statistics_result():
     assert 1 == pytest.approx(precision(pred_labels, gt_labels, "iou"))
 
 
-def test_null_precision_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
-    evops.metrics.constants.UNSEGMENTED_LABEL = 0
-
-    pred_labels = np.array([1, 1, 1, 1])
-    gt_labels = np.array([0, 0, 0, 0])
-
-    assert 0 == pytest.approx(precision(pred_labels, gt_labels, "iou"))
-
-
 def test_half_precision_iou_statistics_result():
     evops.metrics.constants.IOU_THRESHOLD = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
@@ -51,7 +41,7 @@ def test_precision_iou_statistics_assert():
 
     assert (
         str(excinfo.value)
-        == "Incorrect predicted label array values, most likely no labels other than UNSEGMENTED_LABEL"
+        == "Incorrect predicted labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
     )
 
 
@@ -107,7 +97,7 @@ def test_recall_iou_statistics_assert():
 
     assert (
         str(excinfo.value)
-        == "Incorrect ground truth label array values, most likely no labels other than UNSEGMENTED_LABEL"
+        == "Incorrect ground truth labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
     )
 
 
@@ -138,7 +128,7 @@ def test_precision_real_data_iou_statistics():
     pred_labels = np.load("tests/data/pred_0.npy")
     gt_labels = np.load("tests/data/gt_0.npy")
 
-    assert 0.2 == pytest.approx(precision(pred_labels, gt_labels, "iou"), 0.01)
+    assert 0.8 == pytest.approx(precision(pred_labels, gt_labels, "iou"), 0.01)
 
 
 def test_recall_real_data_iou_statistics():
@@ -148,7 +138,7 @@ def test_recall_real_data_iou_statistics():
     pred_labels = np.load("tests/data/pred_0.npy")
     gt_labels = np.load("tests/data/gt_0.npy")
 
-    assert 0.059 == pytest.approx(recall(pred_labels, gt_labels, "iou"), 0.01)
+    assert 0.235 == pytest.approx(recall(pred_labels, gt_labels, "iou"), 0.01)
 
 
 def test_fScore_real_data_iou_statistics():
@@ -158,4 +148,4 @@ def test_fScore_real_data_iou_statistics():
     pred_labels = np.load("tests/data/pred_0.npy")
     gt_labels = np.load("tests/data/gt_0.npy")
 
-    assert 0.09 == pytest.approx(fScore(pred_labels, gt_labels, "iou"), 0.01)
+    assert 0.36 == pytest.approx(fScore(pred_labels, gt_labels, "iou"), 0.01)

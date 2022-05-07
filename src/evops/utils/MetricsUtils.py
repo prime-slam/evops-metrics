@@ -16,6 +16,7 @@ from nptyping import NDArray
 
 import numpy as np
 
+import evops.metrics.constants
 from evops.utils.IoUOverlap import __iou_overlap
 
 __statistics_functions = {"iou": __iou_overlap}
@@ -57,3 +58,57 @@ def __are_nearly_overlapped(
         and intersection.size / plane_gt.size >= required_overlap,
         intersection.size > 0,
     )
+
+
+def __get_tp(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> np.int32:
+    """
+    :param pred_labels: labels of points corresponding to segmented planes
+    :param gt_labels: labels of points corresponding to ground truth planes
+    :param tp_condition: helper function to calculate statistics
+    :return: true positive received using pred_labels and gt_labels
+    """
+    true_positive = 0
+
+    unique_gt_labels = np.unique(gt_labels)
+    unique_gt_labels = np.delete(
+        unique_gt_labels,
+        np.where(unique_gt_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
+    assert (
+        unique_gt_labels.size != 0
+    ), "Incorrect ground truth labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
+
+    unique_pred_labels = np.unique(pred_labels)
+    unique_pred_labels = np.delete(
+        unique_pred_labels,
+        np.where(unique_pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
+    assert (
+        unique_pred_labels.size != 0
+    ), "Incorrect predicted labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
+
+    pred_used = set()
+    tp_condition_function = __statistics_functions[tp_condition]
+
+    for gt_label in unique_gt_labels:
+        is_already_true_positive = False
+        gt_indices = np.where(gt_labels == gt_label)[0]
+        for pred_label in unique_pred_labels:
+            pred_indices = np.where(pred_labels == pred_label)[0]
+
+            is_overlap = tp_condition_function(pred_indices, gt_indices)
+
+            if (
+                is_overlap
+                and pred_label not in pred_used
+                and not is_already_true_positive
+            ):
+                true_positive += 1
+                is_already_true_positive = True
+                pred_used.add(pred_label)
+
+    return true_positive
