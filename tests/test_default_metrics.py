@@ -44,7 +44,7 @@ def test_precision_iou_statistics_assert():
 
     assert (
         str(excinfo.value)
-        == "Incorrect labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
+        == "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
     )
 
 
@@ -105,7 +105,7 @@ def test_recall_iou_statistics_assert():
 
     assert (
         str(excinfo.value)
-        == "Incorrect labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
+        == "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
     )
 
 

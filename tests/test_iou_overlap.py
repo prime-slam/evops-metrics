@@ -15,7 +15,7 @@ import numpy as np
 import pytest
 
 import evops.metrics.constants
-from evops.utils.IoUOverlap import is_overlapped_iou
+from evops.utils.IoUOverlap import __is_overlapped_iou
 
 
 def test_full_iou_overlap():
@@ -24,7 +24,7 @@ def test_full_iou_overlap():
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([1, 2, 3, 4])
 
-    assert is_overlapped_iou(pred_indices, gt_indices)
+    assert __is_overlapped_iou(pred_indices, gt_indices)
 
 
 def test_null_iou_overlap():
@@ -33,7 +33,7 @@ def test_null_iou_overlap():
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([5, 6, 7, 8])
 
-    assert not is_overlapped_iou(pred_indices, gt_indices)
+    assert not __is_overlapped_iou(pred_indices, gt_indices)
 
 
 def test_iou_overlap():
@@ -42,4 +42,4 @@ def test_iou_overlap():
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([1, 2, 5, 6])
 
-    assert is_overlapped_iou(pred_indices, gt_indices)
+    assert __is_overlapped_iou(pred_indices, gt_indices)
