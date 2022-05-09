@@ -17,7 +17,7 @@ from nptyping import NDArray
 import numpy as np
 
 import evops.metrics.constants
-from evops.utils.MetricsUtils import __get_tp
+from evops.utils.MetricsUtils import __get_tp, __filter_unsegmented
 
 
 def __precision(
@@ -26,14 +26,7 @@ def __precision(
     tp_condition: str,
 ) -> np.float64:
     true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
-
-    pred_labels = np.delete(
-        pred_labels,
-        np.where(pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-    assert (
-        pred_labels.size != 0
-    ), "Incorrect predicted label array values, most likely no labels other than UNSEGMENTED_LABEL"
+    pred_labels = __filter_unsegmented(pred_labels)
 
     return true_positive / np.unique(pred_labels).size
 
@@ -44,13 +37,7 @@ def __recall(
     tp_condition: str,
 ) -> np.float64:
     true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
-
-    gt_labels = np.delete(
-        gt_labels, np.where(gt_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0]
-    )
-    assert (
-        gt_labels.size != 0
-    ), "Incorrect ground truth label array values, most likely no labels other than UNSEGMENTED_LABEL"
+    gt_labels = __filter_unsegmented(gt_labels)
 
     return true_positive / np.unique(gt_labels).size
 

@@ -20,7 +20,7 @@ import evops.metrics.constants
 from evops.metrics.IoUBenchmark import __iou
 
 
-def __iou_overlap(
+def is_overlapped_iou(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
 ) -> bool:

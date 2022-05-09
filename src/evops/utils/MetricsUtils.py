@@ -17,9 +17,9 @@ from nptyping import NDArray
 import numpy as np
 
 import evops.metrics.constants
-from evops.utils.IoUOverlap import __iou_overlap
+from evops.utils.IoUOverlap import is_overlapped_iou
 
-__statistics_functions = {"iou": __iou_overlap}
+__statistics_functions = {"iou": is_overlapped_iou}
 
 
 def __group_indices_by_labels(
@@ -60,6 +60,21 @@ def __are_nearly_overlapped(
     )
 
 
+def __filter_unsegmented_unique(
+    label_array: NDArray[Any, np.int32],
+) -> NDArray[Any, np.int32]:
+    unique_label_array = np.unique(label_array)
+    unique_label_array = np.delete(
+        unique_label_array,
+        np.where(unique_label_array == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
+    assert (
+        unique_label_array.size != 0
+    ), "Incorrect labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
+
+    return unique_label_array
+
+
 def __get_tp(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
@@ -73,42 +88,38 @@ def __get_tp(
     """
     true_positive = 0
 
-    unique_gt_labels = np.unique(gt_labels)
-    unique_gt_labels = np.delete(
-        unique_gt_labels,
-        np.where(unique_gt_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-    assert (
-        unique_gt_labels.size != 0
-    ), "Incorrect ground truth labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
-
-    unique_pred_labels = np.unique(pred_labels)
-    unique_pred_labels = np.delete(
-        unique_pred_labels,
-        np.where(unique_pred_labels == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
-    )
-    assert (
-        unique_pred_labels.size != 0
-    ), "Incorrect predicted labels unique count, most likely no labels other than UNSEGMENTED_LABEL"
+    unique_gt_labels = __filter_unsegmented_unique(gt_labels)
+    unique_pred_labels = __filter_unsegmented_unique(pred_labels)
 
     pred_used = set()
     tp_condition_function = __statistics_functions[tp_condition]
 
     for gt_label in unique_gt_labels:
-        is_already_true_positive = False
         gt_indices = np.where(gt_labels == gt_label)[0]
         for pred_label in unique_pred_labels:
-            pred_indices = np.where(pred_labels == pred_label)[0]
+            if pred_label in pred_used:
+                continue
 
+            pred_indices = np.where(pred_labels == pred_label)[0]
             is_overlap = tp_condition_function(pred_indices, gt_indices)
 
-            if (
-                is_overlap
-                and pred_label not in pred_used
-                and not is_already_true_positive
-            ):
+            if is_overlap and pred_label not in pred_used:
                 true_positive += 1
-                is_already_true_positive = True
                 pred_used.add(pred_label)
+                break
 
     return true_positive
+
+
+def __filter_unsegmented(
+    label_array: NDArray[Any, np.int32],
+) -> NDArray[Any, np.int32]:
+    label_array = np.delete(
+        label_array,
+        np.where(label_array == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+    )
+    assert (
+        label_array.size != 0
+    ), "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
+
+    return label_array
