@@ -23,7 +23,7 @@ def __mean(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     metric: Callable[
-        [NDArray[(Any, 3), np.float64], NDArray[Any, np.int32], NDArray[Any, np.int32]],
+        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
         np.float64,
     ],
 ) -> np.float64:

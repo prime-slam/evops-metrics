@@ -50,4 +50,8 @@ def __fScore(
     precision = __precision(pred_labels, gt_labels, tp_condition)
     recall = __recall(pred_labels, gt_labels, tp_condition)
 
+    # Prevent division by zero
+    if precision + recall == 0:
+        return 0.0
+
     return 2 * precision * recall / (precision + recall)
