@@ -1,26 +1,24 @@
 [tool.poetry]
 name = "evops"
-version = "0.1.1"
+version = "0.1.3"
 description = "Evaluation of Plane Segmentation."
-authors = ["Dmitriy Jarosh", "Pavel Mokeev"]
+authors = ["Pavel Mokeev", "Dmitriy Jarosh"]
 license = "APACHE"
+readme = "README.md"
+homepage = "https://evops.netlify.app/"
+repository = "https://github.com/MobileRoboticsSkoltech/evops"
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
 numpy = "^1.19.0"
 nptyping = "^1.4.4"
-importlib-metadata = "4.8.3"
+importlib-metadata = "^4.8.3"
 importlib-resources = "^5.7.1"
 
 [tool.poetry.dev-dependencies]
-open3d = "^0.14.1"
-black = {version = "^22.3.0", python = "^3.9"}
-pre-commit = {version = "^2.17.0", python = "^3.9"}
+open3d = "0.14.1"
 pytest = "^7.0.0"
-myst-nb = {version = "^0.13.2", python = "^3.9"}
-sphinx-autoapi = {version = "^1.8.4", python = "^3.9"}
-sphinx-rtd-theme = {version = "^1.0.0", python = "^3.9"}
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
