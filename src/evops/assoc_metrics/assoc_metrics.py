@@ -108,6 +108,6 @@ def quantitative_points_with_matching(
     """
     gt_assoc_dict = matcher(labels_cur, labels_prev, gt_labels_cur, gt_labels_prev)
     planes_length = dict()
-    for cur, _ in assoc_dict.items():
+    for cur in assoc_dict.keys():
         planes_length[cur] = len(np.where(labels_cur == cur)[0])
     return quantitative_points(assoc_dict, planes_length, gt_assoc_dict)
