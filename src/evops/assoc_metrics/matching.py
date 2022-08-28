@@ -14,17 +14,17 @@ def __match_one_pair(labels, gt_labeled_image):
     annot_unique = np.unique(labels, axis=0)
     plane_color_length = dict()
     # Getting plane ID: (color, number of points) pairs
-    for annot_num in annot_unique:
-        if annot_num == UNSEGMENTED_LABEL:
+    for annot in annot_unique:
+        if annot == UNSEGMENTED_LABEL:
             continue
-        indices = np.where(labels == annot_num)[0]
+        indices = np.where(labels == annot)[0]
         colors, counts = np.unique(
             gt_labeled_image[indices], axis=0, return_counts=True
         )
         matched_color = colors[counts.argmax()]
         if np.all(matched_color == 0):
             continue
-        plane_color_length[annot_num] = matched_color, max(counts)
+        plane_color_length[annot] = matched_color, max(counts)
     # Sorting pairs by number of points
     sorted_length = sorted(
         plane_color_length.items(), key=lambda x: x[1][1], reverse=True
