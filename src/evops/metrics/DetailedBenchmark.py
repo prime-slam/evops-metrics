@@ -20,12 +20,11 @@ import numpy as np
 import evops.metrics.constants
 
 
-def __multi_value_benchmark(
+def __detailed_benchmark(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    overlap_threshold: np.float64 = 0.8,
-) -> Dict[str, np.float64]:
-    correctly_segmented_amount = 0
+    tp_condition: str
+) -> Dict[str, float]:
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
     if evops.metrics.constants.UNSEGMENTED_LABEL in plane_predicted_dict:
@@ -45,7 +44,11 @@ def __multi_value_benchmark(
         part_overlapped_gt_planes = []
         for gt_label, gt_plane in plane_gt_dict.items():
             are_well_overlapped, are_part_overlapped = __are_nearly_overlapped(
-                predicted_plane, gt_plane, overlap_threshold
+                predicted_plane,
+                gt_plane,
+                evops.metrics.constants.IOU_THRESHOLD_FULL,
+                evops.metrics.constants.IOU_THRESHOLD_PART,
+                tp_condition
             )
             if are_well_overlapped:
                 overlapped_gt_planes.append(gt_plane)
@@ -55,9 +58,7 @@ def __multi_value_benchmark(
                 part_overlapped_gt_planes.append(gt_plane)
                 part_overlapped_predicted_by_gt[gt_label].append(predicted_label)
 
-        if len(overlapped_gt_planes) > 0:
-            correctly_segmented_amount += 1
-        else:
+        if len(overlapped_gt_planes) == 0:
             noise_amount += 1
 
         if len(part_overlapped_gt_planes) > 1:
@@ -74,14 +75,8 @@ def __multi_value_benchmark(
             over_segmented_amount += 1
 
     return {
-        "precision": correctly_segmented_amount / predicted_amount
-        if predicted_amount != 0
-        else 0,
-        "recall": correctly_segmented_amount / gt_amount if gt_amount != 0 else 0,
-        "under_segmented": under_segmented_amount / predicted_amount
-        if predicted_amount != 0
-        else 0,
-        "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0,
-        "missed": missed_amount / gt_amount if gt_amount != 0 else 0,
-        "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0,
+        "under_segmented": under_segmented_amount / predicted_amount if predicted_amount != 0 else 0.,
+        "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0.,
+        "missed": missed_amount / gt_amount if gt_amount != 0 else 0.,
+        "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0.,
     }

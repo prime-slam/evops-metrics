@@ -11,13 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Callable, Any
+from typing import Callable, Any, Dict
 from nptyping import NDArray
 
 from evops.metrics.DefaultBenchmark import __precision, __recall, __fScore
 from evops.metrics.DiceBenchmark import __dice
 from evops.metrics.IoUBenchmark import __iou
-from evops.metrics.MultiValueBenchmark import __multi_value_benchmark
+from evops.metrics.DetailedBenchmark import __detailed_benchmark
 from evops.metrics.MeanBenchmark import __mean
 
 import numpy as np
@@ -123,17 +123,17 @@ def mean(
     return __mean(pred_labels, gt_labels, metric)
 
 
-def multi_value(
+def detailed_metrics(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    overlap_threshold: np.float64 = 0.8,
-) -> (np.float64, np.float64, np.float64, np.float64, np.float64, np.float64):
+    tp_condition: str,
+) -> Dict[str, float]:
     """
     :param pred_labels: labels of points obtained as a result of segmentation
     :param gt_labels: reference labels of point cloud
-    :param overlap_threshold: minimum value at which the planes are considered intersected
+    :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: precision, recall, under_segmented, over_segmented, missed, noise
     """
-    __iou_dice_mean_bechmark_asserts(pred_labels, gt_labels)
+    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
-    return __multi_value_benchmark(pred_labels, gt_labels, overlap_threshold)
+    return __detailed_benchmark(pred_labels, gt_labels, tp_condition)

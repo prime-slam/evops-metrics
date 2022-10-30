@@ -23,10 +23,15 @@ from evops.metrics.IoUBenchmark import __iou
 def __is_overlapped_iou(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
+    threshold: float = None
 ) -> bool:
     """
     :param pred_indices: indices of points belonging to the given predicted label
     :param gt_indices: indices of points belonging to the given predicted label
+    :param threshold: value at which planes will be selected as overlapped enough
     :return: true if IoU >= evops.metrics.constants.IOU_THRESHOLD
     """
-    return __iou(pred_indices, gt_indices) >= evops.metrics.constants.IOU_THRESHOLD
+    if threshold is None:
+        threshold = evops.metrics.constants.IOU_THRESHOLD_FULL
+
+    return __iou(pred_indices, gt_indices) >= threshold

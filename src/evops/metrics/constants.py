@@ -12,4 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 UNSEGMENTED_LABEL = 0
-IOU_THRESHOLD = 0.75
+IOU_THRESHOLD_FULL = 0.75
+IOU_THRESHOLD_PART = 0.2

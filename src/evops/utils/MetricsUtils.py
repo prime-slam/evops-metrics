@@ -40,23 +40,28 @@ def __group_indices_by_labels(
 
 
 def __are_nearly_overlapped(
-    plane_predicted: NDArray[Any, np.int32],
-    plane_gt: NDArray[Any, np.int32],
-    required_overlap: np.float64,
+    predicted_indices: NDArray[Any, np.int32],
+    gt_indices: NDArray[Any, np.int32],
+    full_overlap_threshold: float,
+    part_overlap_threshold: float,
+    tp_condition: str,
 ) -> (bool, bool):
     """
-    Calculate if planes are overlapped enough (required_overlap %) to be used for PP-PR metric
-    :param required_overlap: overlap threshold which will b checked to say that planes overlaps
-    :param plane_predicted: predicted segmentation
-    :param plane_gt: ground truth segmentation
-    :return: true if planes are overlapping by required_overlap % or more, false otherwise
+    Calculate if planes are overlapped enough with IoU to be used for PP-PR metric
+    :param full_overlap_threshold: overlap threshold which will be checked to say that planes overlaps fully
+    :param part_overlap_threshold: overlap threshold which will be checked to say that planes overlaps partly
+    :param predicted_indices: indices of points belonging to the given predicted label
+    :param gt_indices: indices of points belonging to the given gt label
+    :param tp_condition: helper function to calculate statistics
+    :return: Two booleans
+    1) true if planes are overlapping fully by full_overlap_threshold threshold or more, false otherwise
+    2) true if planes are overlapping partly by part_overlap_threshold threshold or more, false otherwise
     """
-    intersection = np.intersect1d(plane_predicted, plane_gt)
+    tp_condition_function = __statistics_functions[tp_condition]
 
     return (
-        intersection.size / plane_predicted.size >= required_overlap
-        and intersection.size / plane_gt.size >= required_overlap,
-        intersection.size > 0,
+        tp_condition_function(predicted_indices, gt_indices, full_overlap_threshold),
+        tp_condition_function(predicted_indices, gt_indices, part_overlap_threshold),
     )
 
 
