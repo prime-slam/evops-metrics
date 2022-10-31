@@ -40,13 +40,17 @@ def __mean(
 
     for label_index, label in enumerate(plane_predicted_dict.keys()):
         for gt_label in plane_gt_dict.keys():
-            is_overlap = tp_condition_function(plane_predicted_dict[label], plane_gt_dict[gt_label])
+            is_overlap = tp_condition_function(
+                plane_predicted_dict[label], plane_gt_dict[gt_label]
+            )
             if is_overlap:
-                metric_value = metric(plane_predicted_dict[label], plane_gt_dict[gt_label])
+                metric_value = metric(
+                    plane_predicted_dict[label], plane_gt_dict[gt_label]
+                )
                 mean_array.append(metric_value)
                 break
 
     if len(mean_array) == 0:
-        return 0.
+        return 0.0
 
     return np.array(mean_array).mean()

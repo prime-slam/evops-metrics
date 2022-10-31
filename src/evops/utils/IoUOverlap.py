@@ -23,7 +23,7 @@ from evops.metrics.IoUBenchmark import __iou
 def __is_overlapped_iou(
     pred_indices: NDArray[Any, np.int32],
     gt_indices: NDArray[Any, np.int32],
-    threshold: float = None
+    threshold: float = None,
 ) -> bool:
     """
     :param pred_indices: indices of points belonging to the given predicted label

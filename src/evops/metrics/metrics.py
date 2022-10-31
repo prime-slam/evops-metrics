@@ -135,15 +135,17 @@ def panoptic(
     tp_condition: str,
 ) -> float:
     """
-        :param pred_labels: labels of points obtained as a result of segmentation
-        :param gt_labels: reference labels of point cloud
-        :param metric: metric function for which you want to get the mean value
-        :param tp_condition: helper function to calculate statistics: {'iou'}
-        :return: panoptic metric value for planes
-        """
+    :param pred_labels: labels of points obtained as a result of segmentation
+    :param gt_labels: reference labels of point cloud
+    :param metric: metric function for which you want to get the mean value
+    :param tp_condition: helper function to calculate statistics: {'iou'}
+    :return: panoptic metric value for planes
+    """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
-    return __mean(pred_labels, gt_labels, metric, tp_condition) * __fScore(pred_labels, gt_labels, tp_condition)
+    return __mean(pred_labels, gt_labels, metric, tp_condition) * __fScore(
+        pred_labels, gt_labels, tp_condition
+    )
 
 
 def detailed(

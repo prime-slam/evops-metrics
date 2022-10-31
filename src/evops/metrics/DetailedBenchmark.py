@@ -23,7 +23,7 @@ import evops.metrics.constants
 def __detailed_benchmark(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
-    tp_condition: str
+    tp_condition: str,
 ) -> Dict[str, float]:
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
@@ -48,7 +48,7 @@ def __detailed_benchmark(
                 gt_plane,
                 evops.metrics.constants.IOU_THRESHOLD_FULL,
                 evops.metrics.constants.IOU_THRESHOLD_PART,
-                tp_condition
+                tp_condition,
             )
             if are_well_overlapped:
                 overlapped_gt_planes.append(gt_plane)
@@ -75,8 +75,10 @@ def __detailed_benchmark(
             over_segmented_amount += 1
 
     return {
-        "under_segmented": under_segmented_amount / predicted_amount if predicted_amount != 0 else 0.,
-        "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0.,
-        "missed": missed_amount / gt_amount if gt_amount != 0 else 0.,
-        "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0.,
+        "under_segmented": under_segmented_amount / predicted_amount
+        if predicted_amount != 0
+        else 0.0,
+        "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0.0,
+        "missed": missed_amount / gt_amount if gt_amount != 0 else 0.0,
+        "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0.0,
     }
