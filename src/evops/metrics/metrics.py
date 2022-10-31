@@ -118,14 +118,35 @@ def mean(
     :param gt_labels: reference labels of point cloud
     :param metric: metric function for which you want to get the mean value
     :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: list of mean value for each metric
+    :return: mean value for matched planes
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
     return __mean(pred_labels, gt_labels, metric, tp_condition)
 
 
-def detailed_metrics(
+def panoptic(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    metric: Callable[
+        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
+        np.float64,
+    ],
+    tp_condition: str,
+) -> float:
+    """
+        :param pred_labels: labels of points obtained as a result of segmentation
+        :param gt_labels: reference labels of point cloud
+        :param metric: metric function for which you want to get the mean value
+        :param tp_condition: helper function to calculate statistics: {'iou'}
+        :return: panoptic metric value for planes
+        """
+    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+
+    return __mean(pred_labels, gt_labels, metric, tp_condition) * __fScore(pred_labels, gt_labels, tp_condition)
+
+
+def detailed(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
