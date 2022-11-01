@@ -31,21 +31,15 @@ def test_half_precision_iou_statistics_result():
     assert 0.5 == pytest.approx(precision(pred_labels, gt_labels, tp_condition))
 
 
-def test_precision_iou_statistics_assert():
+def test_precision_iou_statistics_empty_prediction():
     evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
-    with pytest.raises(AssertionError) as excinfo:
-        tp_condition = "iou"
-        pred_labels = np.array([0, 0, 0, 0])
-        gt_labels = np.array([1, 1, 1, 1])
+    tp_condition = "iou"
+    pred_labels = np.array([0, 0, 0, 0])
+    gt_labels = np.array([1, 1, 1, 1])
 
-        precision(pred_labels, gt_labels, tp_condition)
-
-    assert (
-        str(excinfo.value)
-        == "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
-    )
+    assert 0 == precision(pred_labels, gt_labels, tp_condition)
 
 
 def test_null_recall_iou_statistics_result():
@@ -92,21 +86,15 @@ def test_half_recall_iou_statistics_result():
     assert 0.5 == pytest.approx(recall(pred_labels, gt_labels, tp_condition))
 
 
-def test_recall_iou_statistics_assert():
+def test_recall_iou_statistics_empty_prediction():
     evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
-    with pytest.raises(AssertionError) as excinfo:
-        tp_condition = "iou"
-        pred_labels = np.array([1, 1, 1, 1])
-        gt_labels = np.array([0, 0, 0, 0])
+    tp_condition = "iou"
+    pred_labels = np.array([1, 1, 1, 1])
+    gt_labels = np.array([0, 0, 0, 0])
 
-        recall(pred_labels, gt_labels, tp_condition)
-
-    assert (
-        str(excinfo.value)
-        == "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
-    )
+    assert 0 == recall(pred_labels, gt_labels, tp_condition)
 
 
 def test_full_fScore_iou_statistics_result():
