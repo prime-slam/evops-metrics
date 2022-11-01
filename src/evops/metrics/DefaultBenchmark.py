@@ -17,7 +17,7 @@ from nptyping import NDArray
 import numpy as np
 
 import evops.metrics.constants
-from evops.utils.MetricsUtils import __get_tp, __filter_unsegmented
+from evops.utils.MetricsUtils import __calc_tp, __filter_unsegmented
 
 
 def __precision(
@@ -25,14 +25,14 @@ def __precision(
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
 ) -> np.float64:
-    true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
+    true_positive = __calc_tp(pred_labels, gt_labels, tp_condition)
     pred_labels = __filter_unsegmented(pred_labels)
 
-    unique_pred_labels_count = np.unique(pred_labels).size
-    if unique_pred_labels_count == 0:
-        return 0.0
+    unique_pred_labels_size = np.unique(pred_labels).size
 
-    return true_positive / unique_pred_labels_count
+    return (
+        true_positive / unique_pred_labels_size if unique_pred_labels_size != 0 else 0.0
+    )
 
 
 def __recall(
@@ -40,14 +40,12 @@ def __recall(
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
 ) -> np.float64:
-    true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
+    true_positive = __calc_tp(pred_labels, gt_labels, tp_condition)
     gt_labels = __filter_unsegmented(gt_labels)
 
-    unique_gt_labels_count = np.unique(gt_labels).size
-    if unique_gt_labels_count == 0:
-        return 0.0
+    unique_gt_labels_size = np.unique(gt_labels).size
 
-    return true_positive / unique_gt_labels_count
+    return true_positive / unique_gt_labels_size if unique_gt_labels_size != 0 else 0.0
 
 
 def __fScore(
@@ -58,8 +56,7 @@ def __fScore(
     precision = __precision(pred_labels, gt_labels, tp_condition)
     recall = __recall(pred_labels, gt_labels, tp_condition)
 
-    # Prevent division by zero
-    if precision + recall == 0:
-        return 0.0
+    numerator = 2 * precision * recall
+    denominator = precision + recall
 
-    return 2 * precision * recall / (precision + recall)
+    return numerator / denominator if denominator != 0 else 0.0

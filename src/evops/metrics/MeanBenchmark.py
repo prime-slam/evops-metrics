@@ -50,7 +50,4 @@ def __mean(
                 mean_array.append(metric_value)
                 break
 
-    if len(mean_array) == 0:
-        return 0.0
-
-    return np.array(mean_array).mean()
+    return np.array(mean_array).mean() if len(mean_array) != 0 else 0.0

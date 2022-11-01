@@ -14,7 +14,10 @@
 from typing import Any, Dict
 from nptyping import NDArray
 
-from evops.utils.MetricsUtils import __group_indices_by_labels, __are_nearly_overlapped
+from evops.utils.MetricsUtils import (
+    __group_indices_by_labels,
+    __statistics_functions,
+)
 
 import numpy as np
 import evops.metrics.constants
@@ -25,37 +28,44 @@ def __detailed_benchmark(
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
 ) -> Dict[str, float]:
-    plane_predicted_dict = __group_indices_by_labels(pred_labels)
-    plane_gt_dict = __group_indices_by_labels(gt_labels)
-    if evops.metrics.constants.UNSEGMENTED_LABEL in plane_predicted_dict:
-        del plane_predicted_dict[evops.metrics.constants.UNSEGMENTED_LABEL]
-    if evops.metrics.constants.UNSEGMENTED_LABEL in plane_gt_dict:
-        del plane_gt_dict[evops.metrics.constants.UNSEGMENTED_LABEL]
-    predicted_amount = len(plane_predicted_dict)
-    gt_amount = len(plane_gt_dict)
+    predicted_label_to_indices = __group_indices_by_labels(pred_labels)
+    gt_label_to_indices = __group_indices_by_labels(gt_labels)
+    if evops.metrics.constants.UNSEGMENTED_LABEL in predicted_label_to_indices:
+        del predicted_label_to_indices[evops.metrics.constants.UNSEGMENTED_LABEL]
+    if evops.metrics.constants.UNSEGMENTED_LABEL in gt_label_to_indices:
+        del gt_label_to_indices[evops.metrics.constants.UNSEGMENTED_LABEL]
+    predicted_amount = len(predicted_label_to_indices)
+    gt_amount = len(gt_label_to_indices)
     under_segmented_amount = 0
     noise_amount = 0
 
-    overlapped_predicted_by_gt = {label: [] for label in plane_gt_dict.keys()}
-    part_overlapped_predicted_by_gt = {label: [] for label in plane_gt_dict.keys()}
+    overlapped_predicted_by_gt = {label: [] for label in gt_label_to_indices.keys()}
+    part_overlapped_predicted_by_gt = {
+        label: [] for label in gt_label_to_indices.keys()
+    }
 
-    for predicted_label, predicted_plane in plane_predicted_dict.items():
+    tp_condition_function = __statistics_functions[tp_condition]
+
+    for predicted_label, predicted_indices in predicted_label_to_indices.items():
         overlapped_gt_planes = []
         part_overlapped_gt_planes = []
-        for gt_label, gt_plane in plane_gt_dict.items():
-            are_well_overlapped, are_part_overlapped = __are_nearly_overlapped(
-                predicted_plane,
-                gt_plane,
+        for gt_label, gt_indices in gt_label_to_indices.items():
+            are_well_overlapped = tp_condition_function(
+                predicted_indices,
+                gt_indices,
                 evops.metrics.constants.IOU_THRESHOLD_FULL,
-                evops.metrics.constants.IOU_THRESHOLD_PART,
-                tp_condition,
             )
             if are_well_overlapped:
-                overlapped_gt_planes.append(gt_plane)
+                overlapped_gt_planes.append(gt_indices)
                 overlapped_predicted_by_gt[gt_label].append(predicted_label)
 
+            are_part_overlapped = tp_condition_function(
+                predicted_indices,
+                gt_indices,
+                evops.metrics.constants.IOU_THRESHOLD_PART,
+            )
             if are_part_overlapped:
-                part_overlapped_gt_planes.append(gt_plane)
+                part_overlapped_gt_planes.append(gt_indices)
                 part_overlapped_predicted_by_gt[gt_label].append(predicted_label)
 
         if len(overlapped_gt_planes) == 0:
@@ -74,10 +84,10 @@ def __detailed_benchmark(
         if len(part_overlapped) > 1:
             over_segmented_amount += 1
 
+    usr = under_segmented_amount / predicted_amount if predicted_amount != 0 else 0.0
+
     return {
-        "under_segmented": under_segmented_amount / predicted_amount
-        if predicted_amount != 0
-        else 0.0,
+        "under_segmented": usr,
         "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0.0,
         "missed": missed_amount / gt_amount if gt_amount != 0 else 0.0,
         "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0.0,

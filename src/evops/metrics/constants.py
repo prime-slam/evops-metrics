@@ -11,6 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Label id which depicts that pixel is not a par of any plane
 UNSEGMENTED_LABEL = 0
+
+# Threshold for IoU overlap which defines planes as overlapped enough to be treated
+# as a matched pair of gt and predicted plane for instance based metrics calculation
 IOU_THRESHOLD_FULL = 0.75
+
+# Threshold for IoU overlap which defines planes as overlapped enough to be treated
+# as a partly matched pair of gt and predicted plane for over and under segmentation calculation
 IOU_THRESHOLD_PART = 0.2
