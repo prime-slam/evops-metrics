@@ -2,9 +2,10 @@ import numpy as np
 import pytest
 
 from evops.metrics import detailed
+from fixtures import clean_env
 
 
-def test_detailed_benchmark_real_data():
+def test_detailed_benchmark_real_data(clean_env):
     pred_labels = np.load("tests/data/pred_0.npy")
     gt_labels = np.load("tests/data/gt_0.npy")
 
@@ -17,7 +18,7 @@ def test_detailed_benchmark_real_data():
     assert 0.2 == pytest.approx(result["noise"], 0.01)
 
 
-def test_detailed_benchmark():
+def test_detailed_benchmark(clean_env):
     pred_labels = np.array([1, 1, 1, 1])
     gt_labels = np.array([1, 1, 2, 4])
 
@@ -26,7 +27,7 @@ def test_detailed_benchmark():
     assert 1 == pytest.approx(result["under_segmented"], 0.01)
 
 
-def test_detailed_null_benchmark():
+def test_detailed_null_benchmark(clean_env):
     pred_labels = np.array([0, 0, 0, 0])
     gt_labels = np.array([0, 0, 0, 0])
 
