@@ -29,7 +29,7 @@ def __is_overlapped_iou(
     :param pred_indices: indices of points belonging to the given predicted label
     :param gt_indices: indices of points belonging to the given predicted label
     :param threshold: value at which planes will be selected as overlapped enough
-    :return: true if IoU >= evops.metrics.constants.IOU_THRESHOLD
+    :return: true if IoU >= evops.metrics.constants.IOU_THRESHOLD_FULL
     """
     if threshold is None:
         threshold = evops.metrics.constants.IOU_THRESHOLD_FULL

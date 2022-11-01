@@ -19,7 +19,7 @@ from evops.utils.IoUOverlap import __is_overlapped_iou
 
 
 def test_full_iou_overlap():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
 
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([1, 2, 3, 4])
@@ -28,7 +28,7 @@ def test_full_iou_overlap():
 
 
 def test_null_iou_overlap():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
 
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([5, 6, 7, 8])
@@ -37,7 +37,7 @@ def test_null_iou_overlap():
 
 
 def test_iou_overlap():
-    evops.metrics.constants.IOU_THRESHOLD = 0.25
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.25
 
     pred_indices = np.array([1, 2, 3, 4])
     gt_indices = np.array([1, 2, 5, 6])

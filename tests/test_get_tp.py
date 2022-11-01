@@ -19,7 +19,7 @@ from evops.utils.MetricsUtils import __get_tp
 
 
 def test_get_tp_using_iou():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     pred_labels = np.array([1, 1, 3, 3])
@@ -29,7 +29,7 @@ def test_get_tp_using_iou():
 
 
 def test_get_tp_null_using_iou():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     pred_labels = np.array([1, 2, 3, 4])
@@ -39,7 +39,7 @@ def test_get_tp_null_using_iou():
 
 
 def test_get_tp_full_using_iou():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     pred_labels = np.array([1, 2, 3, 4])

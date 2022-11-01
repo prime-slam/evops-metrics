@@ -8,7 +8,9 @@ repos:
     -   id: end-of-file-fixer
         exclude: ^README.md
     -   id: trailing-whitespace
+        exclude: ^README.md
 -   repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
     -   id: black
+        exclude: ^README.md

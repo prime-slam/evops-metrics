@@ -108,8 +108,5 @@ def __filter_unsegmented(
         label_array,
         np.where(label_array == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
     )
-    assert (
-        label_array.size != 0
-    ), "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
     return label_array

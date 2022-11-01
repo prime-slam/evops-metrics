@@ -28,7 +28,11 @@ def __precision(
     true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
     pred_labels = __filter_unsegmented(pred_labels)
 
-    return true_positive / np.unique(pred_labels).size
+    unique_pred_labels_count = np.unique(pred_labels).size
+    if unique_pred_labels_count == 0:
+        return 0.0
+
+    return true_positive / unique_pred_labels_count
 
 
 def __recall(
@@ -39,7 +43,11 @@ def __recall(
     true_positive = __get_tp(pred_labels, gt_labels, tp_condition)
     gt_labels = __filter_unsegmented(gt_labels)
 
-    return true_positive / np.unique(gt_labels).size
+    unique_gt_labels_count = np.unique(gt_labels).size
+    if unique_gt_labels_count == 0:
+        return 0.0
+
+    return true_positive / unique_gt_labels_count
 
 
 def __fScore(

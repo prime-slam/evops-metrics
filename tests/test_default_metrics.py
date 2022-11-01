@@ -10,7 +10,7 @@ from evops.metrics import (
 
 
 def test_full_precision_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -21,7 +21,7 @@ def test_full_precision_iou_statistics_result():
 
 
 def test_half_precision_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -32,7 +32,7 @@ def test_half_precision_iou_statistics_result():
 
 
 def test_precision_iou_statistics_assert():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     with pytest.raises(AssertionError) as excinfo:
@@ -49,7 +49,7 @@ def test_precision_iou_statistics_assert():
 
 
 def test_null_recall_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -60,7 +60,7 @@ def test_null_recall_iou_statistics_result():
 
 
 def test_full_recall_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -71,7 +71,7 @@ def test_full_recall_iou_statistics_result():
 
 
 def test_full_recall_with_two_planes_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -82,7 +82,7 @@ def test_full_recall_with_two_planes_iou_statistics_result():
 
 
 def test_half_recall_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -93,7 +93,7 @@ def test_half_recall_iou_statistics_result():
 
 
 def test_recall_iou_statistics_assert():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     with pytest.raises(AssertionError) as excinfo:
@@ -110,7 +110,7 @@ def test_recall_iou_statistics_assert():
 
 
 def test_full_fScore_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -121,7 +121,7 @@ def test_full_fScore_iou_statistics_result():
 
 
 def test_almost_half_fScore_iou_statistics_result():
-    evops.metrics.constants.IOU_THRESHOLD = 0.75
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.75
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -132,7 +132,7 @@ def test_almost_half_fScore_iou_statistics_result():
 
 
 def test_precision_real_data_iou_statistics():
-    evops.metrics.constants.IOU_THRESHOLD = 0.5
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.5
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -143,7 +143,7 @@ def test_precision_real_data_iou_statistics():
 
 
 def test_recall_real_data_iou_statistics():
-    evops.metrics.constants.IOU_THRESHOLD = 0.5
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.5
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
@@ -154,7 +154,7 @@ def test_recall_real_data_iou_statistics():
 
 
 def test_fScore_real_data_iou_statistics():
-    evops.metrics.constants.IOU_THRESHOLD = 0.5
+    evops.metrics.constants.IOU_THRESHOLD_FULL = 0.5
     evops.metrics.constants.UNSEGMENTED_LABEL = 0
 
     tp_condition = "iou"
