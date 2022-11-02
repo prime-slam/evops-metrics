@@ -23,10 +23,10 @@ import numpy as np
 import evops.metrics.constants
 
 
-__USR_METRIC_NAME = "undersegmentation rate"
-__OSR_METRIC_NAME = "oversegmentation rate"
-__NOISE_METRIC_NAME = "noise rate"
-__MISSED_METRIC_NAME = "missed rate"
+__USR_METRIC_NAME = "usr"
+__OSR_METRIC_NAME = "osr"
+__NOISE_METRIC_NAME = "noise"
+__MISSED_METRIC_NAME = "missed"
 
 
 def __usr(
@@ -123,12 +123,13 @@ def __detailed(
             over_segmented_amount += 1
 
     usr = under_segmented_amount / predicted_amount if predicted_amount != 0 else 0.0
+    osr = over_segmented_amount / gt_amount if gt_amount != 0 else 0.0
+    missed = missed_amount / gt_amount if gt_amount != 0 else 0.0
+    noise = noise_amount / predicted_amount if predicted_amount != 0 else 0.0
 
     return {
         __USR_METRIC_NAME: usr,
-        __OSR_METRIC_NAME: over_segmented_amount / gt_amount if gt_amount != 0 else 0.0,
-        __MISSED_METRIC_NAME: missed_amount / gt_amount if gt_amount != 0 else 0.0,
-        __NOISE_METRIC_NAME: noise_amount / predicted_amount
-        if predicted_amount != 0
-        else 0.0,
+        __OSR_METRIC_NAME: osr,
+        __MISSED_METRIC_NAME: missed,
+        __NOISE_METRIC_NAME: noise,
     }

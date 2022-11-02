@@ -46,16 +46,16 @@ def full_statistics(
     recall_result = __recall(pred_labels, gt_labels, tp_condition)
     fScore_result = __fScore(pred_labels, gt_labels, tp_condition)
     panoptic_result = __panoptic(pred_labels, gt_labels, metric, tp_condition)
-    usr, osr, missed, noise = __detailed(pred_labels, gt_labels, tp_condition)
+    usr, osr, missed, noise = __detailed(pred_labels, gt_labels, tp_condition).values()
 
     return {
         "panoptic": panoptic_result,
         "precision": precision_result,
         "recall": recall_result,
         "fScore": fScore_result,
-        "undersegmentation rate": usr,
-        "oversegmentation rate": osr,
-        "noise rate": noise,
-        "missed rate": missed,
+        "usr": usr,
+        "osr": osr,
+        "noise": noise,
+        "missed": missed,
         "mean": mean_result,
     }
