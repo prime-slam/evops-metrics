@@ -23,7 +23,45 @@ import numpy as np
 import evops.metrics.constants
 
 
-def __detailed_benchmark(
+__USR_METRIC_NAME = "undersegmentation rate"
+__OSR_METRIC_NAME = "oversegmentation rate"
+__NOISE_METRIC_NAME = "noise rate"
+__MISSED_METRIC_NAME = "missed rate"
+
+
+def __usr(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    return __detailed(pred_labels, gt_labels, tp_condition)[__USR_METRIC_NAME]
+
+
+def __osr(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    return __detailed(pred_labels, gt_labels, tp_condition)[__OSR_METRIC_NAME]
+
+
+def __noise(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    return __detailed(pred_labels, gt_labels, tp_condition)[__NOISE_METRIC_NAME]
+
+
+def __missed(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    return __detailed(pred_labels, gt_labels, tp_condition)[__MISSED_METRIC_NAME]
+
+
+def __detailed(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
@@ -87,8 +125,10 @@ def __detailed_benchmark(
     usr = under_segmented_amount / predicted_amount if predicted_amount != 0 else 0.0
 
     return {
-        "under_segmented": usr,
-        "over_segmented": over_segmented_amount / gt_amount if gt_amount != 0 else 0.0,
-        "missed": missed_amount / gt_amount if gt_amount != 0 else 0.0,
-        "noise": noise_amount / predicted_amount if predicted_amount != 0 else 0.0,
+        __USR_METRIC_NAME: usr,
+        __OSR_METRIC_NAME: over_segmented_amount / gt_amount if gt_amount != 0 else 0.0,
+        __MISSED_METRIC_NAME: missed_amount / gt_amount if gt_amount != 0 else 0.0,
+        __NOISE_METRIC_NAME: noise_amount / predicted_amount
+        if predicted_amount != 0
+        else 0.0,
     }

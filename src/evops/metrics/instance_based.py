@@ -14,46 +14,12 @@
 from typing import Callable, Any, Dict
 from nptyping import NDArray
 
-from evops.metrics.DefaultBenchmark import __precision, __recall, __fScore
-from evops.metrics.DiceBenchmark import __dice
-from evops.metrics.IoUBenchmark import __iou
-from evops.metrics.DetailedBenchmark import __detailed_benchmark
-from evops.metrics.MeanBenchmark import __mean
-
 import numpy as np
 
-from evops.utils.CheckInput import (
-    __default_benchmark_asserts,
-    __iou_dice_mean_bechmark_asserts,
-)
-
-
-def iou(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
-) -> np.float64:
-    """
-    :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: indices of points belonging to the reference plane
-    :return: iou metric value for plane
-    """
-    __iou_dice_mean_bechmark_asserts(pred_indices, gt_indices)
-
-    return __iou(pred_indices, gt_indices)
-
-
-def dice(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
-) -> np.float64:
-    """
-    :param pred_indices: labels of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: labels of points belonging to the reference plane
-    :return: iou metric value for plane
-    """
-    __iou_dice_mean_bechmark_asserts(pred_indices, gt_indices)
-
-    return __dice(pred_indices, gt_indices)
+from evops.metrics.DefaultBenchmark import __fScore, __recall, __precision
+from evops.metrics.DetailedBenchmark import __usr, __osr, __noise, __missed
+from evops.metrics.PanopticBenchmark import __panoptic
+from evops.utils.CheckInput import __default_benchmark_asserts
 
 
 def precision(
@@ -104,27 +70,6 @@ def fScore(
     return __fScore(pred_labels, gt_labels, tp_condition)
 
 
-def mean(
-    pred_labels: NDArray[Any, np.int32],
-    gt_labels: NDArray[Any, np.int32],
-    metric: Callable[
-        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
-        np.float64,
-    ],
-    tp_condition: str,
-) -> float:
-    """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param metric: metric function for which you want to get the mean value
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: mean value for matched planes
-    """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
-
-    return __mean(pred_labels, gt_labels, metric, tp_condition)
-
-
 def panoptic(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
@@ -143,22 +88,68 @@ def panoptic(
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
-    return __mean(pred_labels, gt_labels, metric, tp_condition) * __fScore(
-        pred_labels, gt_labels, tp_condition
-    )
+    return __panoptic(pred_labels, gt_labels, metric, tp_condition)
 
 
-def detailed(
+def usr(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
-) -> Dict[str, float]:
+) -> float:
     """
     :param pred_labels: labels of points obtained as a result of segmentation
     :param gt_labels: reference labels of point cloud
     :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: precision, recall, under_segmented, over_segmented, missed, noise
+    :return: under segmentation rate
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
-    return __detailed_benchmark(pred_labels, gt_labels, tp_condition)
+    return __usr(pred_labels, gt_labels, tp_condition)
+
+
+def osr(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    """
+    :param pred_labels: labels of points obtained as a result of segmentation
+    :param gt_labels: reference labels of point cloud
+    :param tp_condition: helper function to calculate statistics: {'iou'}
+    :return: over segmentation rate
+    """
+    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+
+    return __osr(pred_labels, gt_labels, tp_condition)
+
+
+def noise(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    """
+    :param pred_labels: labels of points obtained as a result of segmentation
+    :param gt_labels: reference labels of point cloud
+    :param tp_condition: helper function to calculate statistics: {'iou'}
+    :return: noise rate --- rate of planes which are detected but don't exist in gt
+    """
+    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+
+    return __noise(pred_labels, gt_labels, tp_condition)
+
+
+def missed(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    tp_condition: str,
+) -> float:
+    """
+    :param pred_labels: labels of points obtained as a result of segmentation
+    :param gt_labels: reference labels of point cloud
+    :param tp_condition: helper function to calculate statistics: {'iou'}
+    :return: missed rate --- rate of planes which exist in gt but aren't detected
+    """
+    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+
+    return __missed(pred_labels, gt_labels, tp_condition)
