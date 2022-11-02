@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-import open3d as o3d
 
 from evops.metrics import dice
 from evops.utils.MetricsUtils import __group_indices_by_labels
