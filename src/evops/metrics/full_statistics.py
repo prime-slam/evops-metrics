@@ -16,11 +16,11 @@ from nptyping import NDArray
 
 import numpy as np
 
-from evops.metrics.DefaultBenchmark import __precision, __recall, __fScore
-from evops.metrics.DetailedBenchmark import __detailed
-from evops.metrics.MeanBenchmark import __mean
-from evops.metrics.PanopticBenchmark import __panoptic
-from evops.utils.CheckInput import __default_benchmark_asserts
+from evops.benchmark.default import __recall, __precision, __fScore
+from evops.benchmark.detailed import __detailed
+from evops.benchmark.mean import __mean
+from evops.benchmark.panoptic import __panoptic
+from evops.utils.check_input import __default_benchmark_asserts
 
 
 def full_statistics(

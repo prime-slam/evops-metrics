@@ -14,14 +14,10 @@
 from typing import Any, Dict
 from nptyping import NDArray
 
-from evops.utils.MetricsUtils import (
-    __group_indices_by_labels,
-    __statistics_functions,
-)
 
 import numpy as np
 import evops.metrics.constants
-
+from evops.utils.metrics_utils import __group_indices_by_labels, __statistics_functions
 
 __USR_METRIC_NAME = "usr"
 __OSR_METRIC_NAME = "osr"

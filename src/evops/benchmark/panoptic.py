@@ -16,8 +16,8 @@ from nptyping import NDArray
 
 import numpy as np
 
-from evops.metrics.DefaultBenchmark import __fScore
-from evops.metrics.MeanBenchmark import __mean
+from evops.benchmark.default import __fScore
+from evops.benchmark.mean import __mean
 
 
 def __panoptic(

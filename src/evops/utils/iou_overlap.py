@@ -17,7 +17,7 @@ from nptyping import NDArray
 import numpy as np
 
 import evops.metrics.constants
-from evops.metrics.IoUBenchmark import __iou
+from evops.benchmark.iou import __iou
 
 
 def __is_overlapped_iou(

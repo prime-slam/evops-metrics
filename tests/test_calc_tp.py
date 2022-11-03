@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
+import evops.metrics
+from evops.utils.metrics_utils import __calc_tp
 
-from evops.utils.MetricsUtils import __calc_tp
 from fixtures import clean_env
 
 

@@ -16,10 +16,10 @@ from nptyping import NDArray
 
 import numpy as np
 
-from evops.metrics.DiceBenchmark import __dice
-from evops.metrics.IoUBenchmark import __iou
-from evops.metrics.MeanBenchmark import __mean
-from evops.utils.CheckInput import (
+from evops.benchmark.dice import __dice
+from evops.benchmark.iou import __iou
+from evops.benchmark.mean import __mean
+from evops.utils.check_input import (
     __iou_dice_mean_bechmark_asserts,
     __default_benchmark_asserts,
 )

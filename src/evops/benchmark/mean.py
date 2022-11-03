@@ -13,10 +13,10 @@
 # limitations under the License.
 from typing import Any, Callable
 from nptyping import NDArray
-from evops.utils.MetricsUtils import __group_indices_by_labels, __statistics_functions
 
 import numpy as np
 import evops.metrics.constants
+from evops.utils.metrics_utils import __group_indices_by_labels, __statistics_functions
 
 
 def __mean(

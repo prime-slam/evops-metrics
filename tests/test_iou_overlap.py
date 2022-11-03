@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 
 import evops.metrics.constants
-from evops.utils.IoUOverlap import __is_overlapped_iou
+from evops.utils.iou_overlap import __is_overlapped_iou
+
 from fixtures import clean_env
 
 

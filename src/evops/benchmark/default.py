@@ -16,8 +16,7 @@ from nptyping import NDArray
 
 import numpy as np
 
-import evops.metrics.constants
-from evops.utils.MetricsUtils import __calc_tp, __filter_unsegmented
+from evops.utils.metrics_utils import __filter_unsegmented, __calc_tp
 
 
 def __precision(

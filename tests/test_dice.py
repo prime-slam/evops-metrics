@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 
 from evops.metrics import dice
-from evops.utils.MetricsUtils import __group_indices_by_labels
+from evops.utils.metrics_utils import __group_indices_by_labels
+
 from fixtures import clean_env
 
 
