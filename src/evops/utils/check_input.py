@@ -16,7 +16,7 @@ from nptyping import NDArray
 
 import numpy as np
 
-from evops.utils.MetricsUtils import __statistics_functions
+from evops.utils.metrics_utils import __statistics_functions
 
 
 def __default_benchmark_asserts(

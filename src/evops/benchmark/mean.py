@@ -13,10 +13,10 @@
 # limitations under the License.
 from typing import Any, Callable
 from nptyping import NDArray
-from evops.utils.MetricsUtils import __group_indices_by_labels
 
 import numpy as np
 import evops.metrics.constants
+from evops.utils.metrics_utils import __group_indices_by_labels, __statistics_functions
 
 
 def __mean(
@@ -26,24 +26,28 @@ def __mean(
         [NDArray[Any, np.int32], NDArray[Any, np.int32]],
         np.float64,
     ],
-) -> np.float64:
+    tp_condition: str,
+) -> float:
     plane_predicted_dict = __group_indices_by_labels(pred_labels)
     plane_gt_dict = __group_indices_by_labels(gt_labels)
     if evops.metrics.constants.UNSEGMENTED_LABEL in plane_predicted_dict:
         del plane_predicted_dict[evops.metrics.constants.UNSEGMENTED_LABEL]
     if evops.metrics.constants.UNSEGMENTED_LABEL in plane_gt_dict:
         del plane_gt_dict[evops.metrics.constants.UNSEGMENTED_LABEL]
-    mean_array = np.zeros(len(plane_predicted_dict.keys()), np.float64)
+    mean_array = []
+
+    tp_condition_function = __statistics_functions[tp_condition]
 
     for label_index, label in enumerate(plane_predicted_dict.keys()):
-        max_metric_value = 0
         for gt_label in plane_gt_dict.keys():
-            metric_value = metric(plane_predicted_dict[label], plane_gt_dict[gt_label])
-            max_metric_value = max(max_metric_value, metric_value)
+            is_overlap = tp_condition_function(
+                plane_predicted_dict[label], plane_gt_dict[gt_label]
+            )
+            if is_overlap:
+                metric_value = metric(
+                    plane_predicted_dict[label], plane_gt_dict[gt_label]
+                )
+                mean_array.append(metric_value)
+                break
 
-        mean_array[label_index] = max_metric_value
-
-    if mean_array.size == 0:
-        return 0
-
-    return mean_array.mean()
+    return np.array(mean_array).mean() if len(mean_array) != 0 else 0.0

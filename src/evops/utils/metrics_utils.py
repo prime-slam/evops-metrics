@@ -17,7 +17,7 @@ from nptyping import NDArray
 import numpy as np
 
 import evops.metrics.constants
-from evops.utils.IoUOverlap import __is_overlapped_iou
+from evops.utils.iou_overlap import __is_overlapped_iou
 
 __statistics_functions = {"iou": __is_overlapped_iou}
 
@@ -33,34 +33,13 @@ def __group_indices_by_labels(
     dictionary = {}
 
     for label in unique_labels:
-        label_indices = np.where(labels_array == label)[0]
+        (label_indices,) = np.where(labels_array == label)
         dictionary[label] = label_indices
 
     return dictionary
 
 
-def __are_nearly_overlapped(
-    plane_predicted: NDArray[Any, np.int32],
-    plane_gt: NDArray[Any, np.int32],
-    required_overlap: np.float64,
-) -> (bool, bool):
-    """
-    Calculate if planes are overlapped enough (required_overlap %) to be used for PP-PR metric
-    :param required_overlap: overlap threshold which will b checked to say that planes overlaps
-    :param plane_predicted: predicted segmentation
-    :param plane_gt: ground truth segmentation
-    :return: true if planes are overlapping by required_overlap % or more, false otherwise
-    """
-    intersection = np.intersect1d(plane_predicted, plane_gt)
-
-    return (
-        intersection.size / plane_predicted.size >= required_overlap
-        and intersection.size / plane_gt.size >= required_overlap,
-        intersection.size > 0,
-    )
-
-
-def __get_tp(
+def __calc_tp(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
     tp_condition: str,
@@ -80,12 +59,12 @@ def __get_tp(
     tp_condition_function = __statistics_functions[tp_condition]
 
     for gt_label in unique_gt_labels:
-        gt_indices = np.where(gt_labels == gt_label)[0]
+        (gt_indices,) = np.where(gt_labels == gt_label)
         for pred_label in unique_pred_labels:
             if pred_label in pred_used:
                 continue
 
-            pred_indices = np.where(pred_labels == pred_label)[0]
+            (pred_indices,) = np.where(pred_labels == pred_label)
             is_overlap = tp_condition_function(pred_indices, gt_indices)
 
             if is_overlap:
@@ -99,12 +78,17 @@ def __get_tp(
 def __filter_unsegmented(
     label_array: NDArray[Any, np.int32],
 ) -> NDArray[Any, np.int32]:
+    """
+    :param label_array: labels of points corresponding to segmented planes
+    :return: labels array where all unsegmented points (with label equal to evops.metrics.constants.UNSEGMENTED_LABEL)
+     are deleted
+    """
+    (unsegmented_indices,) = np.where(
+        label_array == evops.metrics.constants.UNSEGMENTED_LABEL
+    )
     label_array = np.delete(
         label_array,
-        np.where(label_array == evops.metrics.constants.UNSEGMENTED_LABEL)[0],
+        unsegmented_indices,
     )
-    assert (
-        label_array.size != 0
-    ), "Incorrect label array values, most likely no labels other than UNSEGMENTED_LABEL"
 
     return label_array

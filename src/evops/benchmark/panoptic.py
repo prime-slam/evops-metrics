@@ -11,22 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Any
+from typing import Any, Callable
 from nptyping import NDArray
 
 import numpy as np
 
-import evops.metrics.constants
-from evops.metrics.IoUBenchmark import __iou
+from evops.benchmark.default import __fScore
+from evops.benchmark.mean import __mean
 
 
-def __is_overlapped_iou(
-    pred_indices: NDArray[Any, np.int32],
-    gt_indices: NDArray[Any, np.int32],
-) -> bool:
-    """
-    :param pred_indices: indices of points belonging to the given predicted label
-    :param gt_indices: indices of points belonging to the given predicted label
-    :return: true if IoU >= evops.metrics.constants.IOU_THRESHOLD
-    """
-    return __iou(pred_indices, gt_indices) >= evops.metrics.constants.IOU_THRESHOLD
+def __panoptic(
+    pred_labels: NDArray[Any, np.int32],
+    gt_labels: NDArray[Any, np.int32],
+    metric: Callable[
+        [NDArray[Any, np.int32], NDArray[Any, np.int32]],
+        np.float64,
+    ],
+    tp_condition: str,
+) -> float:
+    return __mean(pred_labels, gt_labels, metric, tp_condition) * __fScore(
+        pred_labels, gt_labels, tp_condition
+    )
