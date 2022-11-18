@@ -1,11 +1,29 @@
+# Copyright (c) 2022, Pavel Mokeev, Dmitrii Iarosh, Anastasiia Kornilova
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import numpy as np
 from typing import Optional, Callable, Any, Dict
 from nptyping import NDArray
+
+from evops.benchmark.association import __quantitative_points_with_matching, __quantitative_planes_with_matching, \
+    __quantitative_points, __quantitative_planes
+from evops.utils.check_input import __pred_gt_assert
 from evops.utils.matching import match_labels_with_gt
 
 
 def quantitative_planes(
-    pred_assoc_dict: Dict[int, Optional[int]], gt_assoc_dict: Dict[int, Optional[int]]
+    pred_assoc_dict: Dict[int, Optional[int]],
+    gt_assoc_dict: Dict[int, Optional[int]]
 ) -> float:
     """
     Metric for calculating the ratio of number correctly associated planes to their total number
@@ -17,11 +35,7 @@ def quantitative_planes(
     {ID of plane from current frame: ID of plane from previous frame} format with ground truth associations
     :return: metric result
     """
-    right = 0
-    for cur, prev in pred_assoc_dict.items():
-        if gt_assoc_dict[cur] == prev:
-            right += 1
-    return right / len(pred_assoc_dict)
+    return __quantitative_planes(pred_assoc_dict, gt_assoc_dict)
 
 
 def quantitative_points(
@@ -29,25 +43,7 @@ def quantitative_points(
     planes_sizes: Dict[int, int],
     gt_assoc_dict: Dict[int, Optional[int]],
 ) -> float:
-    """
-    Metric for calculating the ratio of number correctly associated points to their total number
-    REMEMBER: ground truth plane ids have to be synchronised with predicted ones
-    :param pred_assoc_dict: dictionary in
-    {ID of plane from current frame: ID of plane from previous frame} format with predicted associations
-    :param planes_sizes: dictionary in
-    {ID of plane from current frame: number of points} format with amount of points in each plane
-    :param gt_assoc_dict: ground truth association dictionary in
-    {ID of plane from current frame: ID of plane from previous frame} format with ground truth associations
-    :return: metric result
-    """
-    right = 0
-    all_points = 0
-    for cur, prev in pred_assoc_dict.items():
-        cur_size = planes_sizes[cur]
-        all_points += cur_size
-        if gt_assoc_dict[cur] == prev:
-            right += cur_size
-    return right / all_points
+    return __quantitative_points(pred_assoc_dict, planes_sizes, gt_assoc_dict)
 
 
 def quantitative_planes_with_matching(
@@ -80,8 +76,17 @@ def quantitative_planes_with_matching(
     :param matcher: function that matches labels from current and previous frames using ground truth
     :return: metric result
     """
-    gt_assoc_dict = matcher(pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev)
-    return quantitative_planes(pred_assoc_dict, gt_assoc_dict)
+    __pred_gt_assert(pred_labels_cur, gt_labels_cur)
+    __pred_gt_assert(pred_labels_prev, gt_labels_prev)
+
+    return __quantitative_planes_with_matching(
+        pred_assoc_dict,
+        pred_labels_cur,
+        pred_labels_prev,
+        gt_labels_cur,
+        gt_labels_prev,
+        matcher
+    )
 
 
 def quantitative_points_with_matching(
@@ -115,8 +120,14 @@ def quantitative_points_with_matching(
     :param matcher: function that matches labels from current and previous frames using ground truth
     :return: metric result
     """
-    gt_assoc_dict = matcher(pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev)
-    planes_sizes = dict()
-    for cur in pred_assoc_dict.keys():
-        planes_sizes[cur] = len(np.where(pred_labels_cur == cur)[0])
-    return quantitative_points(pred_assoc_dict, planes_sizes, gt_assoc_dict)
+    __pred_gt_assert(pred_labels_cur, gt_labels_cur)
+    __pred_gt_assert(pred_labels_prev, gt_labels_prev)
+
+    return __quantitative_points_with_matching(
+        pred_assoc_dict,
+        pred_labels_cur,
+        pred_labels_prev,
+        gt_labels_cur,
+        gt_labels_prev,
+        matcher
+    )

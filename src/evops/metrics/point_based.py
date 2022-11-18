@@ -20,8 +20,8 @@ from evops.benchmark.dice import __dice
 from evops.benchmark.iou import __iou
 from evops.benchmark.mean import __mean
 from evops.utils.check_input import (
-    __iou_dice_mean_bechmark_asserts,
-    __default_benchmark_asserts,
+    __pred_gt_assert,
+    __tp_condition_assert,
 )
 
 
@@ -34,7 +34,7 @@ def iou(
     :param gt_indices: indices of points belonging to the reference plane
     :return: iou metric value for plane
     """
-    __iou_dice_mean_bechmark_asserts(pred_indices, gt_indices)
+    __pred_gt_assert(pred_indices, gt_indices)
 
     return __iou(pred_indices, gt_indices)
 
@@ -48,7 +48,7 @@ def dice(
     :param gt_indices: labels of points belonging to the reference plane
     :return: iou metric value for plane
     """
-    __iou_dice_mean_bechmark_asserts(pred_indices, gt_indices)
+    __pred_gt_assert(pred_indices, gt_indices)
 
     return __dice(pred_indices, gt_indices)
 
@@ -69,6 +69,7 @@ def mean(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: mean value for matched planes
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __mean(pred_labels, gt_labels, metric, tp_condition)

@@ -19,22 +19,13 @@ import numpy as np
 from evops.utils.metrics_utils import __statistics_functions
 
 
-def __default_benchmark_asserts(
-    pred_labels: NDArray[Any, np.int32],
-    gt_labels: NDArray[Any, np.int32],
+def __tp_condition_assert(
     tp_condition: str,
 ):
-    assert (
-        len(pred_labels.shape) == 1
-    ), "Incorrect predicted label array size, expected (n)"
-    assert (
-        len(gt_labels.shape) == 1
-    ), "Incorrect ground truth label array size, expected (n)"
-    assert pred_labels.size != 0, "Predicted labels array size must not be zero"
     assert tp_condition in __statistics_functions, "Incorrect name of tp condition"
 
 
-def __iou_dice_mean_bechmark_asserts(
+def __pred_gt_assert(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
 ):
@@ -44,4 +35,5 @@ def __iou_dice_mean_bechmark_asserts(
     assert (
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
-    assert pred_labels.size + gt_labels.size != 0, "Array sizes must be positive"
+    assert pred_labels.size + gt_labels.size != 0, "Prediction and ground truth array sizes must be positive"
+    assert pred_labels.size == gt_labels.size, "Prediction and ground truth array sizes must be equals"
