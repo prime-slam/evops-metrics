@@ -1,0 +1,122 @@
+import numpy as np
+from typing import Optional, Callable, Any, Dict
+from nptyping import NDArray
+from evops.utils.matching import match_labels_with_gt
+
+
+def quantitative_planes(
+    pred_assoc_dict: Dict[int, Optional[int]], gt_assoc_dict: Dict[int, Optional[int]]
+) -> float:
+    """
+    Metric for calculating the ratio of number correctly associated planes to their total number
+    REMEMBER: ground truth plane ids have to be synchronised with predicted ones
+    If this isn't done use `quantitative_planes_with_matching` method
+    :param pred_assoc_dict: dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with predicted associations
+    :param gt_assoc_dict: ground truth association dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with ground truth associations
+    :return: metric result
+    """
+    right = 0
+    for cur, prev in pred_assoc_dict.items():
+        if gt_assoc_dict[cur] == prev:
+            right += 1
+    return right / len(pred_assoc_dict)
+
+
+def quantitative_points(
+    pred_assoc_dict: Dict[int, Optional[int]],
+    planes_sizes: Dict[int, int],
+    gt_assoc_dict: Dict[int, Optional[int]],
+) -> float:
+    """
+    Metric for calculating the ratio of number correctly associated points to their total number
+    REMEMBER: ground truth plane ids have to be synchronised with predicted ones
+    :param pred_assoc_dict: dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with predicted associations
+    :param planes_sizes: dictionary in
+    {ID of plane from current frame: number of points} format with amount of points in each plane
+    :param gt_assoc_dict: ground truth association dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with ground truth associations
+    :return: metric result
+    """
+    right = 0
+    all_points = 0
+    for cur, prev in pred_assoc_dict.items():
+        cur_size = planes_sizes[cur]
+        all_points += cur_size
+        if gt_assoc_dict[cur] == prev:
+            right += cur_size
+    return right / all_points
+
+
+def quantitative_planes_with_matching(
+    pred_assoc_dict: Dict[int, Optional[int]],
+    pred_labels_cur: NDArray[Any, np.int32],
+    pred_labels_prev: NDArray[Any, np.int32],
+    gt_labels_cur: NDArray[Any, np.int32],
+    gt_labels_prev: NDArray[Any, np.int32],
+    matcher: Callable[
+        [
+            NDArray[Any, np.int32],
+            NDArray[Any, np.int32],
+            NDArray[Any, np.int32],
+            NDArray[Any, np.int32],
+        ],
+        Dict[int, Optional[int]],
+    ] = match_labels_with_gt,
+) -> float:
+    """
+    Metric for calculating the ratio of number correctly associated planes to their total number
+    This method matches ground truth plane ids with predicted ones using `matcher` function
+    REMEMBER: prediction quality can influence this metric
+    because by default ground truth prediction is used as base for ground truth associations
+    :param pred_assoc_dict: dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with predicted associations
+    :param pred_labels_cur: predicted labels from current frame
+    :param pred_labels_prev: predicted labels from previous frame
+    :param gt_labels_cur: ground truth labels from current frame
+    :param gt_labels_prev: ground truth labels from previous frame
+    :param matcher: function that matches labels from current and previous frames using ground truth
+    :return: metric result
+    """
+    gt_assoc_dict = matcher(pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev)
+    return quantitative_planes(pred_assoc_dict, gt_assoc_dict)
+
+
+def quantitative_points_with_matching(
+    pred_assoc_dict: Dict[int, Optional[int]],
+    pred_labels_cur: NDArray[Any, np.int32],
+    pred_labels_prev: NDArray[Any, np.int32],
+    gt_labels_cur: NDArray[Any, np.int32],
+    gt_labels_prev: NDArray[Any, np.int32],
+    matcher: Callable[
+        [
+            NDArray[Any, np.int32],
+            NDArray[Any, np.int32],
+            NDArray[Any, np.int32],
+            NDArray[Any, np.int32],
+        ],
+        Dict[int, Optional[int]],
+    ] = match_labels_with_gt,
+) -> float:
+    """
+    Metric for calculating the ratio of number correctly associated points to their total number
+    This method matches ground truth plane ids with predicted ones using `matcher` function
+    REMEMBER: prediction quality can influence this metric
+    because by default ground truth prediction is used as base for ground truth associations
+    :param pred_assoc_dict: dictionary in
+    {(ID of plane from current frame, number of points in plane):
+    ID of plane from previous frame} format with predicted associations
+    :param pred_labels_cur: predicted labels from current frame
+    :param pred_labels_prev: predicted labels from previous frame
+    :param gt_labels_cur: ground truth labels from current frame
+    :param gt_labels_prev: ground truth labels from previous frame
+    :param matcher: function that matches labels from current and previous frames using ground truth
+    :return: metric result
+    """
+    gt_assoc_dict = matcher(pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev)
+    planes_sizes = dict()
+    for cur in pred_assoc_dict.keys():
+        planes_sizes[cur] = len(np.where(pred_labels_cur == cur)[0])
+    return quantitative_points(pred_assoc_dict, planes_sizes, gt_assoc_dict)
