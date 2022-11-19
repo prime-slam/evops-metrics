@@ -34,7 +34,7 @@ def iou(
     :param gt_indices: indices of points belonging to the reference plane
     :return: iou metric value for plane
     """
-    __pred_gt_assert(pred_indices, gt_indices)
+    __pred_gt_assert(pred_indices, gt_indices, require_equal_sizes=False)
 
     return __iou(pred_indices, gt_indices)
 
@@ -48,7 +48,7 @@ def dice(
     :param gt_indices: labels of points belonging to the reference plane
     :return: iou metric value for plane
     """
-    __pred_gt_assert(pred_indices, gt_indices)
+    __pred_gt_assert(pred_indices, gt_indices, require_equal_sizes=False)
 
     return __dice(pred_indices, gt_indices)
 

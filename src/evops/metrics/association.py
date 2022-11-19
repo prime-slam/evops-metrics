@@ -15,15 +15,18 @@ import numpy as np
 from typing import Optional, Callable, Any, Dict
 from nptyping import NDArray
 
-from evops.benchmark.association import __quantitative_points_with_matching, __quantitative_planes_with_matching, \
-    __quantitative_points, __quantitative_planes
+from evops.benchmark.association import (
+    __quantitative_points_with_matching,
+    __quantitative_planes_with_matching,
+    __quantitative_points,
+    __quantitative_planes,
+)
 from evops.utils.check_input import __pred_gt_assert
-from evops.utils.matching import match_labels_with_gt
+from evops.utils.association_utils import match_labels_with_gt
 
 
 def quantitative_planes(
-    pred_assoc_dict: Dict[int, Optional[int]],
-    gt_assoc_dict: Dict[int, Optional[int]]
+    pred_assoc_dict: Dict[int, Optional[int]], gt_assoc_dict: Dict[int, Optional[int]]
 ) -> float:
     """
     Metric for calculating the ratio of number correctly associated planes to their total number
@@ -85,7 +88,7 @@ def quantitative_planes_with_matching(
         pred_labels_prev,
         gt_labels_cur,
         gt_labels_prev,
-        matcher
+        matcher,
     )
 
 
@@ -129,5 +132,5 @@ def quantitative_points_with_matching(
         pred_labels_prev,
         gt_labels_cur,
         gt_labels_prev,
-        matcher
+        matcher,
     )

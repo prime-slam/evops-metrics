@@ -18,8 +18,7 @@ from nptyping import NDArray
 
 
 def __match_planes_by_max_overlap(
-    pred_labels: NDArray[Any, np.int32],
-    gt_labels: NDArray[Any, np.int32]
+    pred_labels: NDArray[Any, np.int32], gt_labels: NDArray[Any, np.int32]
 ) -> Dict[int, Optional[int]]:
     """
     Matches predicted and ground truth labels by maximum overlap of planes
@@ -36,7 +35,7 @@ def __match_planes_by_max_overlap(
         if pred_label == UNSEGMENTED_LABEL:
             continue
 
-        label_indices, = np.where(pred_labels == pred_label)
+        (label_indices,) = np.where(pred_labels == pred_label)
         overlapped_gt_labels, counts = np.unique(
             gt_labels[label_indices], return_counts=True
         )

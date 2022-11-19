@@ -34,7 +34,8 @@ def precision(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: precision metric value for plane
     """
-    __tp_condition_assert(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __precision(pred_labels, gt_labels, tp_condition)
 

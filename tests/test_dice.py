@@ -14,7 +14,9 @@ def test_assert_dice_exception(clean_env):
 
         dice(pred_labels, gt_labels)
 
-    assert str(excinfo.value) == "Array sizes must be positive"
+    assert (
+        str(excinfo.value) == "Prediction and ground truth array sizes must be positive"
+    )
 
 
 def test_null_dice_result(clean_env):

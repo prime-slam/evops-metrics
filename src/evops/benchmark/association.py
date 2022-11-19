@@ -16,12 +16,9 @@ from nptyping import NDArray
 
 import numpy as np
 
-from evops.utils.matching import match_labels_with_gt
-
 
 def __quantitative_planes(
-    pred_assoc_dict: Dict[int, Optional[int]],
-    gt_assoc_dict: Dict[int, Optional[int]]
+    pred_assoc_dict: Dict[int, Optional[int]], gt_assoc_dict: Dict[int, Optional[int]]
 ) -> float:
     right = 0
     for cur, prev in pred_assoc_dict.items():
@@ -60,9 +57,11 @@ def __quantitative_planes_with_matching(
             NDArray[Any, np.int32],
         ],
         Dict[int, Optional[int]],
-    ] = match_labels_with_gt,
+    ],
 ) -> float:
-    gt_assoc_dict = matcher(pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev)
+    gt_assoc_dict = matcher(
+        pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev
+    )
     return __quantitative_planes(pred_assoc_dict, gt_assoc_dict)
 
 
@@ -82,7 +81,9 @@ def __quantitative_points_with_matching(
         Dict[int, Optional[int]],
     ],
 ) -> float:
-    gt_assoc_dict = matcher(pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev)
+    gt_assoc_dict = matcher(
+        pred_labels_cur, pred_labels_prev, gt_labels_cur, gt_labels_prev
+    )
     planes_sizes = dict()
     for cur in pred_assoc_dict.keys():
         planes_sizes[cur] = len(np.where(pred_labels_cur == cur)[0])

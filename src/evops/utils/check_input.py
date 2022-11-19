@@ -28,6 +28,7 @@ def __tp_condition_assert(
 def __pred_gt_assert(
     pred_labels: NDArray[Any, np.int32],
     gt_labels: NDArray[Any, np.int32],
+    require_equal_sizes=True,
 ):
     assert (
         len(pred_labels.shape) == 1
@@ -35,5 +36,10 @@ def __pred_gt_assert(
     assert (
         len(gt_labels.shape) == 1
     ), "Incorrect ground truth label array size, expected (n)"
-    assert pred_labels.size + gt_labels.size != 0, "Prediction and ground truth array sizes must be positive"
-    assert pred_labels.size == gt_labels.size, "Prediction and ground truth array sizes must be equals"
+    assert (
+        pred_labels.size + gt_labels.size != 0
+    ), "Prediction and ground truth array sizes must be positive"
+    if require_equal_sizes:
+        assert (
+            pred_labels.size == gt_labels.size
+        ), "Prediction and ground truth array sizes must be equals"

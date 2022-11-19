@@ -28,7 +28,9 @@ def test_assert_iou_exception(clean_env):
 
         iou(pred_labels, gt_labels)
 
-    assert str(excinfo.value) == "Array sizes must be positive"
+    assert (
+        str(excinfo.value) == "Prediction and ground truth array sizes must be positive"
+    )
 
 
 def test_iou_real_data(clean_env):
