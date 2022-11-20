@@ -29,10 +29,10 @@ def precision(
     tp_condition: str,
 ) -> np.float64:
     """
-    :param pred_labels: labels of points that belong to one planes obtained as a result of segmentation
-    :param gt_labels: labels of points belonging to the reference planes
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: precision metric value for plane
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated precision
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -45,10 +45,10 @@ def recall(
     tp_condition: str,
 ) -> np.float64:
     """
-    :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_labels: indices of points belonging to the reference plane
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: recall metric value for plane
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated recall
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -61,10 +61,10 @@ def fScore(
     tp_condition: str,
 ) -> np.float64:
     """
-    :param pred_labels: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_labels: indices of points belonging to the reference plane
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: f-score metric value for plane
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated f-score
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -81,11 +81,13 @@ def panoptic(
     tp_condition: str,
 ) -> float:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param metric: metric function for which you want to get the mean value
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: panoptic metric value for planes
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param metric: metric function for which mean value will be calculated.
+    It is used for pixel perfect part of this metric.
+    Possible values from this library: metrics.iou and metrics.dice
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated panoptic metric value
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -98,10 +100,10 @@ def usr(
     tp_condition: str,
 ) -> float:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: under segmentation rate
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated undersegmentation ratio
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -114,10 +116,10 @@ def osr(
     tp_condition: str,
 ) -> float:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: over segmentation rate
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated oversegmentation ratio
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -130,10 +132,10 @@ def noise(
     tp_condition: str,
 ) -> float:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: noise rate --- rate of planes which are detected but don't exist in gt
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated noise planes ratio --- ratio of planes which are detected but don't exist in gt
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 
@@ -146,10 +148,10 @@ def missed(
     tp_condition: str,
 ) -> float:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: missed rate --- rate of planes which exist in gt but aren't detected
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: calculated missed planes ratio --- ratio of planes which exist in gt but aren't detected
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 

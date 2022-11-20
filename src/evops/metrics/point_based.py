@@ -30,9 +30,9 @@ def iou(
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:
     """
-    :param pred_indices: indices of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: indices of points belonging to the reference plane
-    :return: iou metric value for plane
+    :param pred_indices: array containing indices of the plane corresponding points as a result of segmentation
+    :param gt_indices: array containing indices of the plane corresponding points as ground truth segmentation
+    :return: IoU value for planes
     """
     __iou_dice_mean_bechmark_asserts(pred_indices, gt_indices)
 
@@ -44,9 +44,9 @@ def dice(
     gt_indices: NDArray[Any, np.int32],
 ) -> np.float64:
     """
-    :param pred_indices: labels of points that belong to one plane obtained as a result of segmentation
-    :param gt_indices: labels of points belonging to the reference plane
-    :return: iou metric value for plane
+    :param pred_indices: array containing indices of the plane corresponding points as a result of segmentation
+    :param gt_indices: array containing indices of the plane corresponding points as ground truth segmentation
+    :return: dice coefficient for planes
     """
     __iou_dice_mean_bechmark_asserts(pred_indices, gt_indices)
 
@@ -63,11 +63,12 @@ def mean(
     tp_condition: str,
 ) -> float:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
     :param metric: metric function for which you want to get the mean value
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: mean value for matched planes
+    Possible values from this library: metrics.iou and metrics.dice
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: mean value of the selected metric calculated only for the matched planes
     """
     __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
 

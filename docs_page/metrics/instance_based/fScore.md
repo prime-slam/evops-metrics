@@ -1,10 +1,12 @@
 <p style="font-size: 30pt; font-weight: bold;">
-    metrics.mean
+    metrics.fScore
 </p>
 
 <p style="font-size: 20pt; font-weight: bold;">
-    metrics.<span style="color: red;">mean</span>(pred_labels, gt_labels, tp_condition) <a href="https://github.com/MobileRoboticsSkoltech/evops/blob/release/0.1/src/evops/metrics/metrics.py#L112">[source]</a>
+    metrics.<span style="color: red;">fScore</span>(pred_labels, gt_labels, tp_condition) <a href="https://github.com/prime-slam/evops-metrics/blob/release-1.0/src/evops/metrics/instance_based.py#L58">[source]</a>
 </p>
+
+Evaluates F-Score of plane detection algorithm.
 
 <dt style="font-size: 20pt;">Parameters:</dt>
 <dd class="field-odd">
@@ -13,7 +15,7 @@
     <span style="font-style: italic;">NDArray[Any, np.int32]</span>
     </dt>
     <dd>
-        <p>Array containing the labels of the corresponding points as a result of segmentation</p>
+        <p>Array containing the labels of points obtained as a result of segmentation</p>
     </dl>
 </dd>
 <dd class="field-odd">
@@ -22,26 +24,26 @@
     <span style="font-style: italic;">NDArray[Any, np.int32]</span>
     </dt>
     <dd>
-        <p>Array containing the labels of the corresponding points as grount truth segmentation</p>
+        <p>Array containing the reference labels of point cloud</p>
     </dl>
 </dd>
 <dd class="field-odd">
     <dl>
-    <dt><strong>metric: </strong>
+    <dt><strong>tp_condition: </strong>
     <span style="font-style: italic;">string</span>
     </dt>
     <dd>
-        <p>metric function for which you want to get the mean value</p>
+        <p>Helper function to match planes from predicted to reference ones. Possible values: <code>"iou"</code></p>
     </dl>
 </dd>
 <dt style="font-size: 20pt;">Returns:</dt>
 <dd class="field-odd">
     <dl>
-    <dt><strong>mean_value: </strong>
+    <dt><strong>f_score_value: </strong>
     <span style="font-style: italic;">np.float64</span>
     </dt>
     <dd>
-        <p>Mean value for point cloud using corresponding metric function.</p>
+        <p>Calculated F-Score</p>
     </dl>
 </dd>
 
@@ -52,9 +54,9 @@
 </p>
 
 ```bash
->>> pred_labels = np.array([1, 1, 1])
->>> gt_labels = np.array([1, 1, 1])
->>> metric = iou
->>> mean(pred_labels, gt_labels, metric)
-1
+>>> pred_labels = np.array([1, 1, 3, 3])
+>>> gt_labels = np.array([2, 2, 0, 3])
+>>> tp_condition = "iou"
+>>> fScore(pred_labels, gt_labels, tp_condition)
+0.5
 ```
