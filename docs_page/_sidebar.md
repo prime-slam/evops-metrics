@@ -9,5 +9,3 @@
     * [Recall](metrics/recall.md)
     * [Mean](metrics/mean.md)
     * [Multi value benchmark](metrics/multiValue.md)
-* Utils
-    * [Constans](utils/constans.md)
