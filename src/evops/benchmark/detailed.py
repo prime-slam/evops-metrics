@@ -11,11 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import numpy as np
+
 from typing import Any, Dict
 from nptyping import NDArray
 
-
-import numpy as np
 import evops.metrics.constants
 from evops.utils.metrics_utils import __group_indices_by_labels, __statistics_functions
 

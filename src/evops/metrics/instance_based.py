@@ -11,11 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Callable, Any, Dict
-from nptyping import NDArray
-
 import numpy as np
 
+from typing import Callable, Any, Dict
+from nptyping import NDArray
 
 from evops.benchmark.default import __precision, __recall, __fScore
 from evops.benchmark.detailed import __usr, __noise, __missed, __osr

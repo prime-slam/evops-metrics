@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Pavel Mokeev, Dmitrii Iarosh, Anastasiia Kornilova
+# Copyright (c) 2022, Pavel Mokeev, Dmitrii Iarosh, Anastasiia Kornilova, Ivan Moskalenko
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import numpy as np
+
 from typing import Optional, Callable, Any, Dict
 from nptyping import NDArray
 
 from evops.benchmark.association import (
-    __quantitative_points_with_matching,
-    __quantitative_planes_with_matching,
-    __quantitative_points,
-    __quantitative_planes,
+    __matched_points_ratio_with_matching,
+    __matched_planes_ratio_with_matching,
+    __matched_points_ratio,
+    __matched_planes_ratio,
 )
 from evops.utils.check_input import __pred_gt_assert
 from evops.utils.association_utils import match_labels_with_gt
 
 
-def quantitative_planes(
+def matched_planes_ratio(
     pred_assoc_dict: Dict[int, Optional[int]], gt_assoc_dict: Dict[int, Optional[int]]
 ) -> float:
     """
@@ -38,18 +39,28 @@ def quantitative_planes(
     {ID of plane from current frame: ID of plane from previous frame} format with ground truth associations
     :return: metric result
     """
-    return __quantitative_planes(pred_assoc_dict, gt_assoc_dict)
+    return __matched_planes_ratio(pred_assoc_dict, gt_assoc_dict)
 
 
-def quantitative_points(
+def matched_points_ratio(
     pred_assoc_dict: Dict[int, Optional[int]],
     planes_sizes: Dict[int, int],
     gt_assoc_dict: Dict[int, Optional[int]],
 ) -> float:
-    return __quantitative_points(pred_assoc_dict, planes_sizes, gt_assoc_dict)
+    """
+    Metric for calculating the ratio of number correctly associated points to their total number
+    REMEMBER: ground truth plane ids have to be synchronised with predicted ones
+    If this isn't done use `quantitative_points_with_matching` method
+    :param pred_assoc_dict: dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with predicted associations
+    :param gt_assoc_dict: ground truth association dictionary in
+    {ID of plane from current frame: ID of plane from previous frame} format with ground truth associations
+    :return: metric result
+    """
+    return __matched_points_ratio(pred_assoc_dict, planes_sizes, gt_assoc_dict)
 
 
-def quantitative_planes_with_matching(
+def matched_planes_ratio_with_matching(
     pred_assoc_dict: Dict[int, Optional[int]],
     pred_labels_cur: NDArray[Any, np.int32],
     pred_labels_prev: NDArray[Any, np.int32],
@@ -82,7 +93,7 @@ def quantitative_planes_with_matching(
     __pred_gt_assert(pred_labels_cur, gt_labels_cur)
     __pred_gt_assert(pred_labels_prev, gt_labels_prev)
 
-    return __quantitative_planes_with_matching(
+    return __matched_planes_ratio_with_matching(
         pred_assoc_dict,
         pred_labels_cur,
         pred_labels_prev,
@@ -92,7 +103,7 @@ def quantitative_planes_with_matching(
     )
 
 
-def quantitative_points_with_matching(
+def matched_points_ratio_with_matching(
     pred_assoc_dict: Dict[int, Optional[int]],
     pred_labels_cur: NDArray[Any, np.int32],
     pred_labels_prev: NDArray[Any, np.int32],
@@ -126,7 +137,7 @@ def quantitative_points_with_matching(
     __pred_gt_assert(pred_labels_cur, gt_labels_cur)
     __pred_gt_assert(pred_labels_prev, gt_labels_prev)
 
-    return __quantitative_points_with_matching(
+    return __matched_points_ratio_with_matching(
         pred_assoc_dict,
         pred_labels_cur,
         pred_labels_prev,
