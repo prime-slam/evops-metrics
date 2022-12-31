@@ -21,8 +21,8 @@ def test_full_statistics_benchmark_real_data(clean_env):
     assert 0.36 == pytest.approx(result["fScore"], 0.01)
     assert 0.2 == pytest.approx(result["usr"], 0.01)
     assert 0.0 == pytest.approx(result["osr"], 0.01)
-    assert 0.2 == pytest.approx(result["noise"], 0.01)
-    assert 0.76 == pytest.approx(result["missed"], 0.01)
+    assert 0.0 == pytest.approx(result["noise"], 0.01)
+    assert 0.59 == pytest.approx(result["missed"], 0.01)
     assert 0.99 == pytest.approx(result["mean"], 0.01)
 
 
@@ -43,7 +43,7 @@ def test_full_statistics_benchmark(clean_env):
     assert 1 == pytest.approx(result["usr"], 0.01)
     assert 0 == pytest.approx(result["osr"], 0.01)
     assert 0 == pytest.approx(result["noise"], 0.01)
-    assert 0.66 == pytest.approx(result["missed"], 0.01)
+    assert 0.0 == pytest.approx(result["missed"], 0.01)
     assert 0.5 == pytest.approx(result["mean"], 0.01)
 
 

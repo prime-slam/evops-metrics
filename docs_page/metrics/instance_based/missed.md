@@ -55,7 +55,7 @@ It shows which part of ground truth planes algorithm hasn't detected at all.
 </p>
 
 ```bash
->>> pred_labels = np.array([1, 1, 3, 3])
+>>> pred_labels = np.array([1, 1, 0, 0])
 >>> gt_labels = np.array([2, 2, 0, 3])
 >>> tp_condition = "iou"
 >>> missed(pred_labels, gt_labels, tp_condition)

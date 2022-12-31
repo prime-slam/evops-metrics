@@ -33,7 +33,7 @@ def test_noise_benchmark_real_data(clean_env):
     tp_condition = "iou"
     result = noise(pred_labels, gt_labels, tp_condition)
 
-    assert 0.2 == pytest.approx(result, 0.01)
+    assert 0.0 == pytest.approx(result, 0.01)
 
 
 def test_missed_benchmark_real_data(clean_env):
@@ -43,7 +43,7 @@ def test_missed_benchmark_real_data(clean_env):
     tp_condition = "iou"
     result = missed(pred_labels, gt_labels, tp_condition)
 
-    assert 0.76 == pytest.approx(result, 0.01)
+    assert 0.59 == pytest.approx(result, 0.01)
 
 
 def test_usr_benchmark(clean_env):
@@ -83,7 +83,7 @@ def test_missed_benchmark(clean_env):
 
     tp_condition = "iou"
     result = missed(pred_labels, gt_labels, tp_condition)
-    assert 0.66 == pytest.approx(result, 0.01)
+    assert 0.0 == pytest.approx(result, 0.01)
 
 
 def test_usr_null_benchmark(clean_env):

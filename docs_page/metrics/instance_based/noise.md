@@ -56,7 +56,7 @@ It shows which part of predicted planes wasn't found in the ground truth data.
 
 ```bash
 >>> pred_labels = np.array([1, 1, 3, 3])
->>> gt_labels = np.array([2, 2, 0, 3])
+>>> gt_labels = np.array([2, 2, 0, 0])
 >>> tp_condition = "iou"
 >>> noise(pred_labels, gt_labels, tp_condition)
 0.5

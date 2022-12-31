@@ -70,19 +70,17 @@ def __detailed(
         del gt_label_to_indices[evops.metrics.constants.UNSEGMENTED_LABEL]
     predicted_amount = len(predicted_label_to_indices)
     gt_amount = len(gt_label_to_indices)
-    under_segmented_amount = 0
-    noise_amount = 0
 
-    overlapped_predicted_by_gt = {label: [] for label in gt_label_to_indices.keys()}
-    part_overlapped_predicted_by_gt = {
-        label: [] for label in gt_label_to_indices.keys()
+    overlapped_gt_to_pred = {label: [] for label in gt_label_to_indices.keys()}
+    part_overlapped_gt_to_pred = {label: [] for label in gt_label_to_indices.keys()}
+    overlapped_pred_to_gt = {label: [] for label in predicted_label_to_indices.keys()}
+    part_overlapped_pred_to_gt = {
+        label: [] for label in predicted_label_to_indices.keys()
     }
 
     tp_condition_function = __statistics_functions[tp_condition]
 
     for predicted_label, predicted_indices in predicted_label_to_indices.items():
-        overlapped_gt_planes = []
-        part_overlapped_gt_planes = []
         for gt_label, gt_indices in gt_label_to_indices.items():
             are_well_overlapped = tp_condition_function(
                 predicted_indices,
@@ -90,8 +88,8 @@ def __detailed(
                 evops.metrics.constants.IOU_THRESHOLD_FULL,
             )
             if are_well_overlapped:
-                overlapped_gt_planes.append(gt_indices)
-                overlapped_predicted_by_gt[gt_label].append(predicted_label)
+                overlapped_pred_to_gt[predicted_label].append(gt_label)
+                overlapped_gt_to_pred[gt_label].append(predicted_label)
 
             are_part_overlapped = tp_condition_function(
                 predicted_indices,
@@ -99,24 +97,61 @@ def __detailed(
                 evops.metrics.constants.IOU_THRESHOLD_PART,
             )
             if are_part_overlapped:
-                part_overlapped_gt_planes.append(gt_indices)
-                part_overlapped_predicted_by_gt[gt_label].append(predicted_label)
+                part_overlapped_pred_to_gt[predicted_label].append(gt_label)
+                part_overlapped_gt_to_pred[gt_label].append(predicted_label)
 
-        if len(overlapped_gt_planes) == 0:
-            noise_amount += 1
-
-        if len(part_overlapped_gt_planes) > 1:
+    under_segmented_amount = 0
+    noise_amount = 0
+    for (
+        predicted_label,
+        part_overlapped_gt_planes,
+    ) in part_overlapped_pred_to_gt.items():
+        part_overlapped_gt_amount = len(part_overlapped_gt_planes)
+        if part_overlapped_gt_amount > 1:
             under_segmented_amount += 1
 
-    missed_amount = 0
-    for overlapped in overlapped_predicted_by_gt.values():
-        if len(overlapped) == 0:
-            missed_amount += 1
+        has_no_full_overlap = len(overlapped_pred_to_gt[predicted_label]) == 0
+        has_single_only_part_overlap = (
+            part_overlapped_gt_amount == 1 and has_no_full_overlap
+        )
+        if has_single_only_part_overlap:
+            part_overlapped_gt_label = part_overlapped_gt_planes[0]
+            is_not_target_of_osr = (
+                len(part_overlapped_gt_to_pred[part_overlapped_gt_label]) == 1
+            )
+        else:
+            is_not_target_of_osr = False
+        if (
+            part_overlapped_gt_amount == 0
+            or is_not_target_of_osr
+            and has_single_only_part_overlap
+        ):
+            noise_amount += 1
 
+    missed_amount = 0
     over_segmented_amount = 0
-    for part_overlapped in part_overlapped_predicted_by_gt.values():
-        if len(part_overlapped) > 1:
+    for gt_label, part_overlapped_pred_planes in part_overlapped_gt_to_pred.items():
+        part_overlapped_pred_amount = len(part_overlapped_pred_planes)
+        if part_overlapped_pred_amount > 1:
             over_segmented_amount += 1
+
+        has_no_full_overlap = len(overlapped_gt_to_pred[gt_label]) == 0
+        has_single_only_part_overlap = (
+            part_overlapped_pred_amount == 1 and has_no_full_overlap
+        )
+        if has_single_only_part_overlap:
+            part_overlapped_predicted_label = part_overlapped_pred_planes[0]
+            is_not_target_of_usr = (
+                len(part_overlapped_pred_to_gt[part_overlapped_predicted_label]) == 1
+            )
+        else:
+            is_not_target_of_usr = False
+        if (
+            part_overlapped_pred_amount == 0
+            or is_not_target_of_usr
+            and has_single_only_part_overlap
+        ):
+            missed_amount += 1
 
     usr = under_segmented_amount / predicted_amount if predicted_amount != 0 else 0.0
     osr = over_segmented_amount / gt_amount if gt_amount != 0 else 0.0
