@@ -33,11 +33,12 @@ def full_statistics(
     tp_condition: str,
 ) -> Dict[str, float]:
     """
-    :param pred_labels: labels of points obtained as a result of segmentation
-    :param gt_labels: reference labels of point cloud
+    :param pred_labels: array containing the labels of points obtained as a result of segmentation
+    :param gt_labels: array containing the reference labels of point cloud
     :param metric: metric function for which you want to get the mean value
-    :param tp_condition: helper function to calculate statistics: {'iou'}
-    :return: dictionary with all supported metric names and their values
+    Possible values from this library: metrics.iou and metrics.dice
+    :param tp_condition: helper function to match planes from predicted to reference ones. Possible values: {'iou'}
+    :return: dictionary with all supported plane detection metric names and their values
     """
     __pred_gt_assert(pred_labels, gt_labels)
     __tp_condition_assert(tp_condition)

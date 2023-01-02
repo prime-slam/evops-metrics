@@ -6,11 +6,11 @@ repos:
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
-        exclude: ^README.md
+        exclude: ^(docs_page/|README.md)
     -   id: trailing-whitespace
-        exclude: ^README.md
+        exclude: ^(docs_page/|README.md)
 -   repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
     -   id: black
-        exclude: ^README.md
+        exclude: ^(docs_page/|README.md)
