@@ -11,16 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Callable, Any, Dict
-from nptyping import NDArray
-
 import numpy as np
 
+from typing import Callable, Any, Dict
+from nptyping import NDArray
 
 from evops.benchmark.default import __precision, __recall, __fScore
 from evops.benchmark.detailed import __usr, __noise, __missed, __osr
 from evops.benchmark.panoptic import __panoptic
-from evops.utils.check_input import __default_benchmark_asserts
+from evops.utils.check_input import __tp_condition_assert, __pred_gt_assert
 
 
 def precision(
@@ -34,7 +33,8 @@ def precision(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: precision metric value for plane
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __precision(pred_labels, gt_labels, tp_condition)
 
@@ -50,7 +50,8 @@ def recall(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: recall metric value for plane
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __recall(pred_labels, gt_labels, tp_condition)
 
@@ -66,7 +67,8 @@ def fScore(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: f-score metric value for plane
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __fScore(pred_labels, gt_labels, tp_condition)
 
@@ -87,7 +89,8 @@ def panoptic(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: panoptic metric value for planes
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __panoptic(pred_labels, gt_labels, metric, tp_condition)
 
@@ -103,7 +106,8 @@ def usr(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: under segmentation rate
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __usr(pred_labels, gt_labels, tp_condition)
 
@@ -119,7 +123,8 @@ def osr(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: over segmentation rate
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __osr(pred_labels, gt_labels, tp_condition)
 
@@ -135,7 +140,8 @@ def noise(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: noise rate --- rate of planes which are detected but don't exist in gt
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __noise(pred_labels, gt_labels, tp_condition)
 
@@ -151,6 +157,7 @@ def missed(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: missed rate --- rate of planes which exist in gt but aren't detected
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     return __missed(pred_labels, gt_labels, tp_condition)

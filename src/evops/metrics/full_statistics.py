@@ -11,16 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import numpy as np
+
 from typing import Callable, Any, Dict
 from nptyping import NDArray
-
-import numpy as np
 
 from evops.benchmark.default import __recall, __precision, __fScore
 from evops.benchmark.detailed import __detailed
 from evops.benchmark.mean import __mean
 from evops.benchmark.panoptic import __panoptic
-from evops.utils.check_input import __default_benchmark_asserts
+from evops.utils.check_input import __tp_condition_assert, __pred_gt_assert
 
 
 def full_statistics(
@@ -39,7 +39,8 @@ def full_statistics(
     :param tp_condition: helper function to calculate statistics: {'iou'}
     :return: dictionary with all supported metric names and their values
     """
-    __default_benchmark_asserts(pred_labels, gt_labels, tp_condition)
+    __pred_gt_assert(pred_labels, gt_labels)
+    __tp_condition_assert(tp_condition)
 
     mean_result = __mean(pred_labels, gt_labels, metric, tp_condition)
     precision_result = __precision(pred_labels, gt_labels, tp_condition)
